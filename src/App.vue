@@ -3,7 +3,7 @@
 <template>
     <router-view />
     <Toast />
-    <ConfirmDialog></ConfirmDialog>
+    <ConfirmDialog :draggable="false"></ConfirmDialog>
 </template>
 
 <style scoped></style>

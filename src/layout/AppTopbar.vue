@@ -131,6 +131,7 @@ const overlayMenuItems = ref([
                 header: 'Delete Confirmation',
                 icon: 'pi pi-info-circle',
                 acceptClass: 'p-button-danger',
+                position: 'top',
                 accept: () => {
                     logout()
                     // toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Logout Successfully!', life: 3000 });

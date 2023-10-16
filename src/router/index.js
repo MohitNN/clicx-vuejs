@@ -18,6 +18,7 @@ const routes = [
                     requiredAuth: true
                 }
             },
+            ...userroutes,
             {
                 path: '/uikit/formlayout',
                 name: 'formlayout',
