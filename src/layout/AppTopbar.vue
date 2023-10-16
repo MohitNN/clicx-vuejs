@@ -104,11 +104,17 @@ const isOutsideClicked = (event) => {
 };
 const menu = ref(null);
 const logout = (() => {
+    store.dispatch('globleStore/setcounter')
     store.dispatch('auth/logout').then((response) => {
-        router.push({ path : '/login' })
-        toast.add({ severity: 'success', summary: 'Success Message', detail: 'Logout Successfully!', life: 3000 });
-    }).catch((error) => {
+        if(response.data.status) {
 
+            router.push({ path : '/login' })
+            store.dispatch('globleStore/setcounter')
+            toast.add({ severity: 'success', summary: 'Success Message', detail: 'Logout Successfully!', life: 3000 });
+
+        }
+    }).catch((error) => {
+        store.dispatch('globleStore/setcounter')
     })
 })
 const overlayMenuItems = ref([

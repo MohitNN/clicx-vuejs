@@ -70,12 +70,15 @@ const loginSubmit = (() => {
     vv.value.$touch();
     if (vv.value.$invalid) return;
     let data = { email: email_.value, password: password.value };
+    store.dispatch('globleStore/setcounter')
     store.dispatch('auth/login', data).then((response) => {
         if (response.data.status) {
+            store.dispatch('globleStore/setcounter')
             router.push({ path: '/' });
             toast.add({ severity: 'success', summary: 'Success Message', detail: 'Login Successfully!', life: 3000 });
         }
     }).catch((error) => {
+        store.dispatch('globleStore/setcounter')
         toast.add({ severity: 'error', summary: 'Error Message', detail: error.response.data.message, life: 3000 });
 
     })

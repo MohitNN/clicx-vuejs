@@ -136,7 +136,7 @@ const submitForm = (modelType) => {
         let data = vendor.value;
     } else if (modelType == 'group') {
         vv.value.group.$touch();
-        if (vv.value.$invalid) return;
+        if (vv.value.group.$invalid) return;
         let data = group.value;
         store
             .dispatch('GroupStore/saveGroup', data)
