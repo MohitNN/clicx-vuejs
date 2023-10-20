@@ -1,10 +1,12 @@
 <script setup></script>
 
 <template>
-    <router-view />
+    <div>
+        <router-view />
     <Toast />
     <ConfirmDialog :draggable="false"></ConfirmDialog>
     <VueElementLoading :active="is_Loading" spinner="bar-fade-scale" :is-full-screen="false" background-color="rgb(34 35 41 / 90%)" size="100" color="#6366f1" style="font-size:22px;"></VueElementLoading>
+    </div>
 </template>
 <script setup>
 import { ref,computed ,watch } from 'vue';

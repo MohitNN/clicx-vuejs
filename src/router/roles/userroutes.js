@@ -2,7 +2,7 @@ export default [
     {
         path: '/groups',
         name: 'Groups',
-        component: () => import('@/views/Group/ManageGroupIndex.vue'),
+        component: () => import('@/views/Group/index.vue'),
         meta: {
             requiredAuth: true
         },
@@ -10,15 +10,40 @@ export default [
             {
                 path: 'manage-groups',
                 name: 'ManageGroups',
-                component: () => import('@/views/Group/manageGroup.vue'),
+                component: () => import('@/views/Group/ManageGroups.vue'),
                 meta: { requiredAuth: true }
             },
             {
                 path: 'manage-domain',
                 name: 'ManageDomain',
-                component: () => import('@/views/Group/manageDomain.vue'),
+                component: () => import('@/views/Group/ManageDomain.vue'),
                 meta: { requiredAuth: true }
             },
+            {
+                path: 'paid-traffic',
+                name: 'ManagePaidTraffic',
+                component: () => import('@/views/Group/ManagePaidTraffic.vue'),
+                meta: { requiredAuth: true }
+            },
+            {
+                path: 'rotator-group',
+                name: 'ManageRotatorGroup',
+                component: () => import('@/views/Group/ManageRotatorGroup.vue'),
+                meta: { requiredAuth: true }
+            },
+            {
+                path: 'link-sequence',
+                name: 'ManageLinkSequence',
+                component: () => import('@/views/Group/ManageLinkSequence.vue'),
+                meta: { requiredAuth: true }
+            },
+            {
+                path: 'retargeting-pixels',
+                name: 'ManageRetargetingPixels',
+                component: () => import('@/views/Group/ManageRetargetingPixels.vue'),
+                meta: { requiredAuth: true }
+            },
+            
         ]
     },
 

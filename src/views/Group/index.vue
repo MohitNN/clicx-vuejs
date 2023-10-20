@@ -20,13 +20,28 @@ const items = ref([
     },
     {
         label: 'Manage Domain',
-        icon: 'pi pi-fw pi-calendar',
+        icon: 'pi pi-fw pi-database',
         to: 'manage-domain'
     },
     {
-        label: 'Holding Pages',
+        label: 'Paid Traffic',
+        icon: 'pi pi-fw pi-dollar',
+        to: 'paid-traffic'
+    },
+    {
+        label: 'Rotator Group',
+        icon: 'pi pi-fw pi-sitemap',
+        to: 'rotator-group'
+    },
+    {
+        label: 'Link Sequence',
+        icon: 'pi pi-fw pi-link',
+        to: 'link-sequence'
+    },
+    {
+        label: 'Retargeting Pixels',
         icon: 'pi pi-fw pi-server',
-        to: 'manage-domain'
+        to: 'retargeting-pixels'
     },
 ]);
 

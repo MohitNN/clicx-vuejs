@@ -185,7 +185,6 @@ router.beforeEach(async (to, from, next) => {
     const isAdmin = to.matched.some((record) => record.meta.isAdmin)
     const isUser = to.matched.some((record) => record.meta.isUser)
     let user = store.state.auth.user;
-    console.log(user)
     const { path, name, params } = to
     if (isLoggedIn && ['login', 'forgotPassword', 'forgotView'].includes(name)) {
         return next('/')

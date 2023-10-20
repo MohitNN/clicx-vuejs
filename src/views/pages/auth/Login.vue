@@ -1,5 +1,6 @@
 <template>
-    <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+   <div class="flex align-items-center justify-content-center loginPage">
+    <div class="surface-ground h-auto">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
             <div
@@ -36,6 +37,7 @@
             </div>
         </div>
     </div>
+   </div>
     <AppConfig simple />
 </template>
 
@@ -90,6 +92,10 @@ const loginSubmit = (() => {
 .pi-eye {
     transform: scale(1.6);
     margin-right: 1rem;
+}
+
+.loginPage{
+    height: 97vh;
 }
 
 .pi-eye-slash {

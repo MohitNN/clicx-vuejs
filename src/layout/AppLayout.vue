@@ -60,7 +60,7 @@ const isOutsideClicked = (event) => {
 <template>
     <div class="layout-wrapper" :class="containerClass">
         <app-topbar></app-topbar>
-        <div class="layout-sidebar">
+        <div id="style-1" class="layout-sidebar scrollbar">
             <app-sidebar></app-sidebar>
         </div>
         <div class="layout-main-container">
@@ -74,4 +74,30 @@ const isOutsideClicked = (event) => {
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.scrollbar
+{
+	overflow-y: auto;
+}
+
+#style-1::-webkit-scrollbar-track
+{
+	background-color: #F5F5F5;
+    
+}
+
+#style-1::-webkit-scrollbar
+{
+	width: 7px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+	background-color: #F5F5F5;
+}
+
+#style-1::-webkit-scrollbar-thumb
+{
+    border-radius: 12px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #aca9a9;
+}
+</style>

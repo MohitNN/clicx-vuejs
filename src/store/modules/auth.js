@@ -26,7 +26,7 @@ const getters = {
 
 const actions = {
     async login({ commit }, data) {
-        let resp = await axios.post('/api/login', data)
+        let resp = await axios.post('/login', data)
         if (resp.data.status == true) {
             console.log(resp.data)
             commit('SET_USER', resp.data.data)
@@ -37,7 +37,7 @@ const actions = {
     },
 
     async logout({ commit }){
-        let resp = await axios.get('/api/user/logout')
+        let resp = await axios.get('/user/logout')
           commit('SET_USER','')
           commit('SET_ID_TOKEN','')
           commit('SET_AUTHENTICATED',false)
