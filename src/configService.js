@@ -190,6 +190,34 @@ const colors = {
     gridLineColor: '#040620'
 };
 
+const link_status = [
+    {
+        id : 1,
+        status : 'Pending',
+        name : 'Pending'
+    },
+    {
+        id : 2,
+        status : 'Active',
+        name : 'Active'
+    },
+    {
+        id : 3,
+        status : 'Completed',
+        name : 'Completed'
+    },
+    {
+        id : 4,
+        status : 'Evergreen',
+        name : 'Evergreen'
+    },
+    {
+        id : 5,
+        status : 'My Links',
+        name : 'My Links'
+    },
+]
+
 export default {
     tier_1_countries,
     tier_2_countries,
@@ -198,5 +226,6 @@ export default {
     colors: {
         ...colors,
         white: '#fff'
-    }
+    },
+    link_status : link_status
 };

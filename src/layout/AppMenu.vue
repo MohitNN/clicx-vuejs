@@ -9,6 +9,29 @@ const model = ref([
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
+        label: 'Link Bank',
+        icon: 'pi pi-fw pi-briefcase',
+        to: '/pages',
+        items: [
+            {
+                label: 'Link Bank',
+                icon: 'pi pi-fw pi-user',
+                items: [
+                    {
+                        label: 'Create New Link',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/link-bank/create-new-link'
+                    },
+                    {
+                        label: 'Link Bank',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/link-bank/my-links'
+                    },
+                ]
+            },
+        ]
+    },
+    {
         label: 'Settings',
         items: [
             { label: 'Manage Groups', icon: 'pi pi-cog', to: '/groups/manage-groups' , groupMenu : true },

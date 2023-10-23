@@ -10,7 +10,7 @@
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
             <i class="pi pi-bars"></i>
         </button>
-
+        <!-- <Breadcrumb :home="home" :model="items"  class="ml-3"/> -->
         <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
             <i class="pi pi-ellipsis-v"></i>
         </button>
@@ -20,6 +20,7 @@
                 <i class="pi pi-calendar"></i>
                 <span>Calendar</span>
             </button> -->
+            
             <Menu ref="menu" :model="overlayMenuItems" :popup="true" />
             <button @click="toggleMenu" type="button" class="p-link layout-topbar-button">
                 <i class="pi pi-user"></i>
@@ -56,7 +57,17 @@ const router = useRouter();
 onMounted(() => {
     bindOutsideClickListener();
 });
-
+// const home = ref({
+//     icon: 'pi pi-home',
+//     to: '/',
+// });
+// const items = ref([
+//     {label: 'Computer'},
+//     {label: 'Notebook'},
+//     {label: 'Accessories'},
+//     {label: 'Backpacks'},
+//     {label: 'Item'}
+// ]);
 onBeforeUnmount(() => {
     unbindOutsideClickListener();
 });

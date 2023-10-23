@@ -46,5 +46,29 @@ export default [
             
         ]
     },
+    {
+        path: '/link-bank',
+        name: 'LinkBank',
+        component: () => import('@/views/linkBank/index.vue'),
+        meta: {
+            requiredAuth: true
+        },
+    },
+    {
+        path: '/link-bank/create-new-link',
+        name: 'LinkBankNewLink',
+        component: () => import('@/views/linkBank/LinkBankCreateEditLink.vue'),
+        meta: {
+            requiredAuth: true
+        },
+    },
+    {
+        path: '/link-bank/my-links',
+        name: 'LinkBankMyLinks',
+        component: () => import('@/views/linkBank/LinkBankMyLinks.vue'),
+        meta: {
+            requiredAuth: true
+        },
+    }
 
 ]
