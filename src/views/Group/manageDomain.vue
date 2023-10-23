@@ -1,68 +1,3 @@
-<template>
-    <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-6">
-            <Panel header="Domains" :toggleable="true">
-                <div class="grid align-items-center">
-                    <p class="col-8 mb-0 text-base">In this menu you will add your list of User Domain that you want to associate to your individual Link</p>
-                    <Button class="text-base" @click="openModel('domain-setting')" size="small" label="Add User Domain" outlined icon="pi pi-plus" />
-                </div>
-                <div class="flex justify-content-between">
-                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select User Domain</label>
-                    <Dropdown v-model="selectedUserDomain" :options="userDomainList" optionLabel="name" placeholder="Select User Domain" class="w-full md:w-25rem mt-3"> </Dropdown>
-                </div>
-                <div class="flex justify-content-center mt-5">
-                    <span class="p-buttonset">
-                        <Button label="Delete" @click="deleteItems('domain-setting')" severity="danger" icon="pi pi-trash" size="small" />
-                        <Button label="Edit Selected" @click="editItems('domain-setting')" severity="warning" icon="pi pi-pencil" size="small" />
-                    </span>
-                </div>
-            </Panel>
-            <Dialog v-model:visible="UserDomainModel" modal :draggable="false" header="Add User Domain" :style="{ width: '30vw' }">
-                <div class="field p-fluid">
-                    <label for="user_domain_name">User Domain Name</label>
-                    <InputText id="user_domain_name" v-model="vv.user_domain.name.$model" :class="vv?.user_domain.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
-                    <small class="p-error" id="text-error">{{ vv?.user_domain.name?.$errors[0]?.$message || '&nbsp;' }}</small>
-                </div>
-                <!-- <div class="field p-fluid">
-                    <label for="user_domain_name">Slug</label>
-                    <span class="p-input-icon-right">
-                        <i class="pi pi-spin pi-spinner text-3xl validate-icon-check" />
-                        <InputText v-model="vv.user_domain.slug.$model" :class="vv?.user_domain.slug?.$errors[0] ? 'p-invalid' : ''"  />
-                        <small class="p-error" id="text-error">{{ vv?.user_domain.slug?.$errors[0]?.$message || '&nbsp;' }}</small>
-                    </span>
-                </div> -->
-                <div class="field p-fluid">
-                    <label for="user_domain_url">Domain URL</label>
-                    <InputText id="user_domain_url" v-model="vv.user_domain.domain_url.$model" :class="vv?.user_domain.domain_url?.$errors[0] ? 'p-invalid' : ''" type="text" />
-                    <small class="p-error" id="text-error">{{ vv?.user_domain.domain_url?.$errors[0]?.$message || '&nbsp;' }}</small>
-                </div>
-                <div class="field p-fluid">
-                    <label for="redirect_url">Redirect URL</label>
-                    <InputText id="redirect_url" v-model="vv.user_domain.redirect_url.$model" :class="vv?.user_domain.redirect_url?.$errors[0] ? 'p-invalid' : ''" type="text" />
-                    <!-- <small class="p-error" v-if="!vv?.user_domain.isSecureURL" id="text-error"> URL must start with 'http://' or 'https://' </small> -->
-                    <small class="p-error" id="text-error">{{ vv?.user_domain.redirect_url?.$errors[0]?.$message || '&nbsp;' }}</small>
-                </div>
-                <div class="field p-fluid">
-                    <label for="user_domain_pixel_code">Pixel Code</label>
-                    <Textarea id="user_domain_pixel_code" v-model="user_domain.pixel_code" rows="5" />
-                    <!-- <small class="p-error" id="text-error">{{ vv?.user_domain.pixel_code?.$errors[0]?.$message || '&nbsp;' }}</small> -->
-                </div>
-                <div class="field p-fluid">
-                    <label for="user_domain_pixel_code">Cname URL</label>
-                    <div class="flex-1 p-inputgroup">
-                        <InputText placeholder="Keyword" readonly disabled v-model="user_domain.cname_url" />
-                        <Button :disabled="user_domain.cname_url ? false : true" icon="pi pi-copy" severity="primary" @click="copyValue(user_domain.cname_url)" />
-                    </div>
-                </div>
-
-                <template #footer>
-                    <Button label="Cancle" severity="danger" icon="pi pi-times" @click="UserDomainModel = false" text />
-                    <Button label="Add User Domain" icon="pi pi-check" @click="submitForm('domain-setting')" autofocus />
-                </template>
-            </Dialog>
-        </div>
-    </div>
-</template>
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
@@ -204,6 +139,71 @@ onMounted(async () => {
     await init();
 });
 </script>
+<template>
+    <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-6">
+            <Panel header="Domains" :toggleable="true">
+                <div class="grid align-items-center">
+                    <p class="col-8 mb-0 text-base">In this menu you will add your list of User Domain that you want to associate to your individual Link</p>
+                    <Button class="text-base" @click="openModel('domain-setting')" size="small" label="Add User Domain" outlined icon="pi pi-plus" />
+                </div>
+                <div class="flex justify-content-between">
+                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select User Domain</label>
+                    <Dropdown v-model="selectedUserDomain" :options="userDomainList" optionLabel="name" placeholder="Select User Domain" class="w-full md:w-25rem mt-3"> </Dropdown>
+                </div>
+                <div class="flex justify-content-center mt-5">
+                    <span class="p-buttonset">
+                        <Button label="Delete" @click="deleteItems('domain-setting')" severity="danger" icon="pi pi-trash" size="small" />
+                        <Button label="Edit Selected" @click="editItems('domain-setting')" severity="warning" icon="pi pi-pencil" size="small" />
+                    </span>
+                </div>
+            </Panel>
+            <Dialog v-model:visible="UserDomainModel" modal :draggable="false" header="Add User Domain" :style="{ width: '30vw' }">
+                <div class="field p-fluid">
+                    <label for="user_domain_name">User Domain Name</label>
+                    <InputText id="user_domain_name" v-model="vv.user_domain.name.$model" :class="vv?.user_domain.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
+                    <small class="p-error" id="text-error">{{ vv?.user_domain.name?.$errors[0]?.$message || '&nbsp;' }}</small>
+                </div>
+                <!-- <div class="field p-fluid">
+                    <label for="user_domain_name">Slug</label>
+                    <span class="p-input-icon-right">
+                        <i class="pi pi-spin pi-spinner text-3xl validate-icon-check" />
+                        <InputText v-model="vv.user_domain.slug.$model" :class="vv?.user_domain.slug?.$errors[0] ? 'p-invalid' : ''"  />
+                        <small class="p-error" id="text-error">{{ vv?.user_domain.slug?.$errors[0]?.$message || '&nbsp;' }}</small>
+                    </span>
+                </div> -->
+                <div class="field p-fluid">
+                    <label for="user_domain_url">Domain URL</label>
+                    <InputText id="user_domain_url" v-model="vv.user_domain.domain_url.$model" :class="vv?.user_domain.domain_url?.$errors[0] ? 'p-invalid' : ''" type="text" />
+                    <small class="p-error" id="text-error">{{ vv?.user_domain.domain_url?.$errors[0]?.$message || '&nbsp;' }}</small>
+                </div>
+                <div class="field p-fluid">
+                    <label for="redirect_url">Redirect URL</label>
+                    <InputText id="redirect_url" v-model="vv.user_domain.redirect_url.$model" :class="vv?.user_domain.redirect_url?.$errors[0] ? 'p-invalid' : ''" type="text" />
+                    <!-- <small class="p-error" v-if="!vv?.user_domain.isSecureURL" id="text-error"> URL must start with 'http://' or 'https://' </small> -->
+                    <small class="p-error" id="text-error">{{ vv?.user_domain.redirect_url?.$errors[0]?.$message || '&nbsp;' }}</small>
+                </div>
+                <div class="field p-fluid">
+                    <label for="user_domain_pixel_code">Pixel Code</label>
+                    <Textarea id="user_domain_pixel_code" v-model="user_domain.pixel_code" rows="5" />
+                    <!-- <small class="p-error" id="text-error">{{ vv?.user_domain.pixel_code?.$errors[0]?.$message || '&nbsp;' }}</small> -->
+                </div>
+                <div class="field p-fluid">
+                    <label for="user_domain_pixel_code">Cname URL</label>
+                    <div class="flex-1 p-inputgroup">
+                        <InputText placeholder="Keyword" readonly disabled v-model="user_domain.cname_url" />
+                        <Button :disabled="user_domain.cname_url ? false : true" icon="pi pi-copy" severity="primary" @click="copyValue(user_domain.cname_url)" />
+                    </div>
+                </div>
+
+                <template #footer>
+                    <Button label="Cancle" severity="danger" icon="pi pi-times" @click="UserDomainModel = false" text />
+                    <Button label="Add User Domain" icon="pi pi-check" @click="submitForm('domain-setting')" autofocus />
+                </template>
+            </Dialog>
+        </div>
+    </div>
+</template>
 <style scoped>
 .validate-icon-check {
     top: 16px;
