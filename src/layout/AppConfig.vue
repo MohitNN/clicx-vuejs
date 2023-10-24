@@ -7,7 +7,7 @@ import Sidebar from 'primevue/sidebar';
 import { ref } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 
-defineProps({
+defineProps({ 
     simple: {
         type: Boolean,
         default: false

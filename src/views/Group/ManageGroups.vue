@@ -1,139 +1,3 @@
-<template>
-    <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-6">
-            <Panel header="Vendors" :toggleable="true">
-                <div class="grid align-items-center">
-                    <p class="col-9 mb-0 text-base">In this menu you will add your list of vendors that you want to associate to your individual Link</p>
-                    <Button class="text-base" @click="openModel('vendor')" size="small" label="Add Vendor" outlined icon="pi pi-plus" />
-                </div>
-                <div class="flex justify-content-between">
-                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Vendor</label>
-                    <Dropdown  v-model="selectedVendor" :options="vendorList"  optionLabel="name" placeholder="Select A Vendor" class="w-full md:w-25rem mt-3"> </Dropdown>
-                </div>
-                <div class="flex justify-content-center mt-5">
-                    <span class="p-buttonset">
-                        <Button label="Delete" @click="deleteItems('vendor')" severity="danger" icon="pi pi-trash" size="small" />
-                        <Button label="Edit Selected" @click="editItems('vendor')" severity="warning" icon="pi pi-pencil" size="small" />
-                    </span>
-                </div>
-            </Panel>
-        </div>
-        <div class="col-12 lg:col-6 xl:col-6">
-            <Panel header="Groups" :toggleable="true">
-                <div class="grid align-items-center">
-                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Groups that you want to associate to your individual Link</p>
-                    <Button class="text-base" @click="openModel('group')" size="small" label="Add Group" outlined icon="pi pi-plus" />
-                </div>
-                <div class="flex justify-content-between">
-                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Group</label>
-                    <Dropdown v-model="selectedGroup" :options="groupList"  optionLabel="name" placeholder="Select Group" class="w-full md:w-25rem mt-3"> </Dropdown>
-                </div>
-                <div class="flex justify-content-center mt-5">
-                    <span class="p-buttonset">
-                        <Button label="Delete" @click="deleteItems('group')" severity="danger" icon="pi pi-trash" size="small" />
-                        <Button label="Edit Selected" @click="editItems('group')" severity="warning" icon="pi pi-pencil" size="small" />
-                    </span>
-                </div>
-            </Panel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <Panel header="Split Partner" :toggleable="true">
-                <div class="grid align-items-center">
-                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Split Partner that you want to associate to your individual Link</p>
-                    <Button class="text-base" @click="openModel('split-partner')" size="small" label="Add Split Partner" outlined icon="pi pi-plus" />
-                </div>
-                <div class="flex justify-content-between">
-                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Split Partner</label>
-                    <Dropdown v-model="selectedSplitPartner" :options="split_partnerList"  optionLabel="name" placeholder="Select Split Partner" class="w-full md:w-25rem mt-3"> </Dropdown>
-                </div>
-                <div class="flex justify-content-center mt-5">
-                    <span class="p-buttonset">
-                        <Button label="Delete" @click="deleteItems('split-partner')" severity="danger" icon="pi pi-trash" size="small" />
-                        <Button label="Edit Selected" @click="editItems('split-partner')" severity="warning" icon="pi pi-pencil" size="small" />
-                    </span>
-                </div>
-            </Panel>
-        </div>
-
-        <div class="col-12 lg:col-6 xl:col-6">
-            <Panel header="Link Platform" :toggleable="true">
-                <div class="grid align-items-center">
-                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Link Platform that you want to associate to your individual Link</p>
-                    <Button class="text-base" @click="openModel('link-platform')" size="small" label="Add Link Platform" outlined icon="pi pi-plus" />
-                </div>
-                <div class="flex justify-content-between">
-                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Link Platform</label>
-                    <Dropdown v-model="selectedLinkPlatform" :options="link_platformList"  optionLabel="name" placeholder="Select Link Platform" class="w-full md:w-25rem mt-3"> </Dropdown>
-                </div>
-                <div class="flex justify-content-center mt-5">
-                    <span class="p-buttonset">
-                        <Button label="Delete" @click="deleteItems('link-platform')" severity="danger" icon="pi pi-trash" size="small" />
-                        <Button label="Edit Selected" @click="editItems('link-platform')" severity="warning" icon="pi pi-pencil" size="small" />
-                    </span>
-                </div>
-            </Panel>
-        </div>
-        <!-- <div class="col-12 lg:col-6 xl:col-6">
-            <Panel header="Default Domain" :toggleable="true">
-                <div class="grid align-items-center">
-                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Groups that you want to associate to your individual Link</p>
-                </div>
-                <div class="flex justify-content-between">
-                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Domain</label>
-                    <Dropdown v-model="selectedCountry" :options="countries"  optionLabel="name" placeholder="Select A Vendor" class="w-full md:w-25rem mt-3"> </Dropdown>
-                </div>
-            </Panel>
-        </div> -->
-    </div>
-    <Dialog v-model:visible="vendorModelShow" modal :draggable="false" header="Add Vendor" :style="{ width: '30vw' }">
-        <div class="field p-fluid">
-            <label for="vendor">Vendor Name</label>
-            <InputText id="vendor" v-model="vv.vendor.name.$model" :class="vv?.vendor.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
-            <small class="p-error" id="text-error">{{ vv?.vendor.name?.$errors[0]?.$message || '&nbsp;' }}</small>
-        </div>
-        <template #footer>
-            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="vendorModelShow = false" text />
-            <Button label="Add Vendor" icon="pi pi-check" @click="submitForm('vendor')" autofocus />
-        </template>
-    </Dialog>
-
-    <Dialog v-model:visible="groupModelShow" @update:visible="closeDialog($event)" modal :draggable="false" header="Add Group" :style="{ width: '30vw' }">
-        <div class="field p-fluid">
-            <label for="group_name">Group Name</label>
-            <InputText id="group_name" v-model="vv.group.name.$model" :class="vv?.group.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
-            <small class="p-error" id="text-error">{{ vv?.group.name?.$errors[0]?.$message || '&nbsp;' }}</small>
-        </div>
-        <template #footer>
-            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="groupModelShow = false" text />
-            <Button label="Add Group" icon="pi pi-check" @click="submitForm('group')" autofocus />
-        </template>
-    </Dialog>
-
-    <Dialog v-model:visible="split_partnerModelShow" @update:visible="closeDialog($event)" modal :draggable="false" header="Add Split Partner" :style="{ width: '30vw' }">
-        <div class="field p-fluid">
-            <label for="split_partner_name">Split Partner Name</label>
-            <InputText id="split_partner_name" v-model="vv.split_partner.name.$model" :class="vv?.split_partner.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
-            <small class="p-error" id="text-error">{{ vv?.split_partner.name?.$errors[0]?.$message || '&nbsp;' }}</small>
-        </div>
-        <template #footer>
-            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="split_partnerModelShow = false" text />
-            <Button label="Add Split Partner" icon="pi pi-check" @click="submitForm('split-partner')" autofocus />
-        </template>
-    </Dialog>
-
-    <Dialog v-model:visible="link_platformModelShow" @update:visible="closeDialog($event)" modal :draggable="false" header="Add Link Platform" :style="{ width: '30vw' }">
-        <div class="field p-fluid">
-            <label for="link_platform_name">Link Platform Name</label>
-            <InputText id="link_platform_name" v-model="vv.link_platform.name.$model" :class="vv?.link_platform.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
-            <small class="p-error" id="text-error">{{ vv?.link_platform.name?.$errors[0]?.$message || '&nbsp;' }}</small>
-        </div>
-        <template #footer>
-            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="link_platformModelShow = false" text />
-            <Button label="Add Link Platform" icon="pi pi-check" @click="submitForm('link-platform')" autofocus />
-        </template>
-    </Dialog>
-</template>
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
@@ -466,3 +330,139 @@ onMounted(async () => {
     await init();
 });
 </script>
+<template>
+    <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-6">
+            <Panel header="Vendors" :toggleable="true">
+                <div class="grid align-items-center">
+                    <p class="col-9 mb-0 text-base">In this menu you will add your list of vendors that you want to associate to your individual Link</p>
+                    <Button class="text-base" @click="openModel('vendor')" size="small" label="Add Vendor" outlined icon="pi pi-plus" />
+                </div>
+                <div class="flex justify-content-between">
+                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Vendor</label>
+                    <Dropdown  v-model="selectedVendor" :options="vendorList"  optionLabel="name" placeholder="Select A Vendor" class="w-full md:w-25rem mt-3"> </Dropdown>
+                </div>
+                <div class="flex justify-content-center mt-5">
+                    <span class="p-buttonset">
+                        <Button label="Delete" @click="deleteItems('vendor')" severity="danger" icon="pi pi-trash" size="small" />
+                        <Button label="Edit Selected" @click="editItems('vendor')" severity="warning" icon="pi pi-pencil" size="small" />
+                    </span>
+                </div>
+            </Panel>
+        </div>
+        <div class="col-12 lg:col-6 xl:col-6">
+            <Panel header="Groups" :toggleable="true">
+                <div class="grid align-items-center">
+                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Groups that you want to associate to your individual Link</p>
+                    <Button class="text-base" @click="openModel('group')" size="small" label="Add Group" outlined icon="pi pi-plus" />
+                </div>
+                <div class="flex justify-content-between">
+                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Group</label>
+                    <Dropdown v-model="selectedGroup" :options="groupList"  optionLabel="name" placeholder="Select Group" class="w-full md:w-25rem mt-3"> </Dropdown>
+                </div>
+                <div class="flex justify-content-center mt-5">
+                    <span class="p-buttonset">
+                        <Button label="Delete" @click="deleteItems('group')" severity="danger" icon="pi pi-trash" size="small" />
+                        <Button label="Edit Selected" @click="editItems('group')" severity="warning" icon="pi pi-pencil" size="small" />
+                    </span>
+                </div>
+            </Panel>
+        </div>
+
+        <div class="col-12 lg:col-6 xl:col-6">
+            <Panel header="Split Partner" :toggleable="true">
+                <div class="grid align-items-center">
+                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Split Partner that you want to associate to your individual Link</p>
+                    <Button class="text-base" @click="openModel('split-partner')" size="small" label="Add Split Partner" outlined icon="pi pi-plus" />
+                </div>
+                <div class="flex justify-content-between">
+                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Split Partner</label>
+                    <Dropdown v-model="selectedSplitPartner" :options="split_partnerList"  optionLabel="name" placeholder="Select Split Partner" class="w-full md:w-25rem mt-3"> </Dropdown>
+                </div>
+                <div class="flex justify-content-center mt-5">
+                    <span class="p-buttonset">
+                        <Button label="Delete" @click="deleteItems('split-partner')" severity="danger" icon="pi pi-trash" size="small" />
+                        <Button label="Edit Selected" @click="editItems('split-partner')" severity="warning" icon="pi pi-pencil" size="small" />
+                    </span>
+                </div>
+            </Panel>
+        </div>
+
+        <div class="col-12 lg:col-6 xl:col-6">
+            <Panel header="Link Platform" :toggleable="true">
+                <div class="grid align-items-center">
+                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Link Platform that you want to associate to your individual Link</p>
+                    <Button class="text-base" @click="openModel('link-platform')" size="small" label="Add Link Platform" outlined icon="pi pi-plus" />
+                </div>
+                <div class="flex justify-content-between">
+                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Link Platform</label>
+                    <Dropdown v-model="selectedLinkPlatform" :options="link_platformList"  optionLabel="name" placeholder="Select Link Platform" class="w-full md:w-25rem mt-3"> </Dropdown>
+                </div>
+                <div class="flex justify-content-center mt-5">
+                    <span class="p-buttonset">
+                        <Button label="Delete" @click="deleteItems('link-platform')" severity="danger" icon="pi pi-trash" size="small" />
+                        <Button label="Edit Selected" @click="editItems('link-platform')" severity="warning" icon="pi pi-pencil" size="small" />
+                    </span>
+                </div>
+            </Panel>
+        </div>
+        <!-- <div class="col-12 lg:col-6 xl:col-6">
+            <Panel header="Default Domain" :toggleable="true">
+                <div class="grid align-items-center">
+                    <p class="col-9 mb-0 text-base">In this menu you will add your list of Groups that you want to associate to your individual Link</p>
+                </div>
+                <div class="flex justify-content-between">
+                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Domain</label>
+                    <Dropdown v-model="selectedCountry" :options="countries"  optionLabel="name" placeholder="Select A Vendor" class="w-full md:w-25rem mt-3"> </Dropdown>
+                </div>
+            </Panel>
+        </div> -->
+    </div>
+    <Dialog v-model:visible="vendorModelShow" modal :draggable="false" header="Add Vendor" :style="{ width: '30vw' }">
+        <div class="field p-fluid">
+            <label for="vendor">Vendor Name</label>
+            <InputText id="vendor" v-model="vv.vendor.name.$model" :class="vv?.vendor.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
+            <small class="p-error" id="text-error">{{ vv?.vendor.name?.$errors[0]?.$message || '&nbsp;' }}</small>
+        </div>
+        <template #footer>
+            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="vendorModelShow = false" text />
+            <Button label="Add Vendor" icon="pi pi-check" @click="submitForm('vendor')" autofocus />
+        </template>
+    </Dialog>
+
+    <Dialog v-model:visible="groupModelShow" @update:visible="closeDialog($event)" modal :draggable="false" header="Add Group" :style="{ width: '30vw' }">
+        <div class="field p-fluid">
+            <label for="group_name">Group Name</label>
+            <InputText id="group_name" v-model="vv.group.name.$model" :class="vv?.group.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
+            <small class="p-error" id="text-error">{{ vv?.group.name?.$errors[0]?.$message || '&nbsp;' }}</small>
+        </div>
+        <template #footer>
+            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="groupModelShow = false" text />
+            <Button label="Add Group" icon="pi pi-check" @click="submitForm('group')" autofocus />
+        </template>
+    </Dialog>
+
+    <Dialog v-model:visible="split_partnerModelShow" @update:visible="closeDialog($event)" modal :draggable="false" header="Add Split Partner" :style="{ width: '30vw' }">
+        <div class="field p-fluid">
+            <label for="split_partner_name">Split Partner Name</label>
+            <InputText id="split_partner_name" v-model="vv.split_partner.name.$model" :class="vv?.split_partner.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
+            <small class="p-error" id="text-error">{{ vv?.split_partner.name?.$errors[0]?.$message || '&nbsp;' }}</small>
+        </div>
+        <template #footer>
+            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="split_partnerModelShow = false" text />
+            <Button label="Add Split Partner" icon="pi pi-check" @click="submitForm('split-partner')" autofocus />
+        </template>
+    </Dialog>
+
+    <Dialog v-model:visible="link_platformModelShow" @update:visible="closeDialog($event)" modal :draggable="false" header="Add Link Platform" :style="{ width: '30vw' }">
+        <div class="field p-fluid">
+            <label for="link_platform_name">Link Platform Name</label>
+            <InputText id="link_platform_name" v-model="vv.link_platform.name.$model" :class="vv?.link_platform.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
+            <small class="p-error" id="text-error">{{ vv?.link_platform.name?.$errors[0]?.$message || '&nbsp;' }}</small>
+        </div>
+        <template #footer>
+            <Button label="Cancle" severity="danger" icon="pi pi-times" @click="link_platformModelShow = false" text />
+            <Button label="Add Link Platform" icon="pi pi-check" @click="submitForm('link-platform')" autofocus />
+        </template>
+    </Dialog>
+</template>
