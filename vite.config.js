@@ -14,6 +14,7 @@ export default defineConfig(() => {
         },
         server: {
             port: 8080, // Change this to the desired port number
+            host: true
         },
     };
 });

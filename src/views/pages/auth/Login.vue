@@ -1,5 +1,6 @@
 <template>
-    <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+   <div class="flex align-items-center justify-content-center loginPage">
+    <div class="surface-ground h-auto">
         <div class="flex flex-column align-items-center justify-content-center">
             <img :src="logoUrl" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0" />
             <div
@@ -36,6 +37,7 @@
             </div>
         </div>
     </div>
+   </div>
     <AppConfig simple />
 </template>
 
@@ -70,12 +72,15 @@ const loginSubmit = (() => {
     vv.value.$touch();
     if (vv.value.$invalid) return;
     let data = { email: email_.value, password: password.value };
+    store.dispatch('globleStore/setcounter')
     store.dispatch('auth/login', data).then((response) => {
         if (response.data.status) {
+            store.dispatch('globleStore/setcounter')
             router.push({ path: '/' });
             toast.add({ severity: 'success', summary: 'Success Message', detail: 'Login Successfully!', life: 3000 });
         }
     }).catch((error) => {
+        store.dispatch('globleStore/setcounter')
         toast.add({ severity: 'error', summary: 'Error Message', detail: error.response.data.message, life: 3000 });
 
     })
@@ -87,6 +92,10 @@ const loginSubmit = (() => {
 .pi-eye {
     transform: scale(1.6);
     margin-right: 1rem;
+}
+
+.loginPage{
+    height: 97vh;
 }
 
 .pi-eye-slash {

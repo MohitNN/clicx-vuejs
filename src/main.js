@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-
+import VueElementLoading from "vue-element-loading";
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
 import Accordion from 'primevue/accordion';
@@ -100,6 +100,7 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 
+
 import BlockViewer from '@/components/BlockViewer.vue';
 
 import '@/assets/styles.scss';
@@ -127,7 +128,7 @@ app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
 
 app.component('BlockViewer', BlockViewer);
-
+app.component('VueElementLoading', VueElementLoading);
 app.component('Accordion', Accordion);
 app.component('AccordionTab', AccordionTab);
 app.component('AutoComplete', AutoComplete);
