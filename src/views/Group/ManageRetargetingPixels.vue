@@ -1,44 +1,3 @@
-<template>
-    <div class="grid">
-        <div class="col-12 lg:col-6 xl:col-6">
-             
-            <Panel header="Retargeting Pixel" :toggleable="true">
-                <div class="grid align-items-center">
-                    <p class="col-8 mb-0 text-base">In this menu you will add your list of Retargeting Pixel that you want to associate to your individual Link</p>
-                    <Button class="text-base" @click="openModel('retargeting-pixel')" size="small" label="Add Retargeting Pixel" outlined icon="pi pi-plus" />
-                </div>
-                <div class="flex justify-content-between">
-                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Retargeting Pixel</label>
-                    <Dropdown v-model="selectedRetargetingPixel" :options="retargetingPixelList" optionLabel="name" placeholder="Select Retargeting Pixel" class="w-full md:w-25rem mt-3"> </Dropdown>
-                </div>
-                <div class="flex justify-content-center mt-5">
-                    <span class="p-buttonset">
-                        <Button label="Delete" @click="deleteItems('retargeting-pixel')" severity="danger" icon="pi pi-trash" size="small" />
-                        <Button label="Edit Selected" @click="editItems('retargeting-pixel')" severity="warning" icon="pi pi-pencil" size="small" />
-                    </span>
-                </div>
-            </Panel>
-            <Dialog v-model:visible="retargetingPixelModel" modal :draggable="false" header="Add Retargeting Pixel" :style="{ width: '30vw' }">
-                <div class="field p-fluid">
-                    <label for="retargeting_pixel_name">Retargeting Pixel Name</label>
-                    <InputText id="retargeting_pixel_name" v-model="vv.retargeting_pixel.name.$model" :class="vv?.retargeting_pixel.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
-                    <small class="p-error" id="text-error">{{ vv?.retargeting_pixel.name?.$errors[0]?.$message || '&nbsp;' }}</small>
-                </div>         
-                <div class="field p-fluid">
-                    <label for="retargeting_pixel_name">Retargeting Pixel Code</label>
-                    <Textarea id="retargeting_pixel_name" v-model="vv.retargeting_pixel.code.$model" :class="vv?.retargeting_pixel.code?.$errors[0] ? 'p-invalid' : ''" rows="5" />
-
-                    <small class="p-error" id="text-error">{{ vv?.retargeting_pixel.code?.$errors[0]?.$message || '&nbsp;' }}</small>
-                </div>
-                <template #footer>
-                    <Button label="Cancle" severity="danger" icon="pi pi-times" @click="retargetingPixelModel = false" text />
-                    <Button label="Add Retargeting Pixel" icon="pi pi-check" @click="submitForm('retargeting-pixel')" autofocus />
-                </template>
-            </Dialog>
-        </div>
-    </div>
-</template>
-
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
@@ -91,7 +50,9 @@ const submitForm = (modelType) => {
                     toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                 }
             })
-            .catch((error) => {});
+            .catch((error) => {
+                console.log(error);
+            });
     }
 };
 
@@ -128,7 +89,9 @@ const deleteItems = (modelType) => {
                                 toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                             }
                         })
-                        .catch((error) => {});
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 },
                 reject: () => {
                     toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
@@ -144,11 +107,56 @@ const deleteItems = (modelType) => {
 const init = async () => {
     await store
         .dispatch('GroupStore/getRetargetingPixel')
-        .then((response) => {})
-        .catch((error) => {});
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 };
 
 onMounted(async () => {
     await init();
 });
 </script>
+
+<template>
+    <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-6">
+             
+            <Panel header="Retargeting Pixel" :toggleable="true">
+                <div class="grid align-items-center">
+                    <p class="col-8 mb-0 text-base">In this menu you will add your list of Retargeting Pixel that you want to associate to your individual Link</p>
+                    <Button class="text-base" @click="openModel('retargeting-pixel')" size="small" label="Add Retargeting Pixel" outlined icon="pi pi-plus" />
+                </div>
+                <div class="flex justify-content-between">
+                    <label class="flex-initial flex align-items-center justify-content-center font-semibold"> Select Retargeting Pixel</label>
+                    <Dropdown v-model="selectedRetargetingPixel" :options="retargetingPixelList" optionLabel="name" placeholder="Select Retargeting Pixel" class="w-full md:w-25rem mt-3"> </Dropdown>
+                </div>
+                <div class="flex justify-content-center mt-5">
+                    <span class="p-buttonset">
+                        <Button label="Delete" @click="deleteItems('retargeting-pixel')" severity="danger" icon="pi pi-trash" size="small" />
+                        <Button label="Edit Selected" @click="editItems('retargeting-pixel')" severity="warning" icon="pi pi-pencil" size="small" />
+                    </span>
+                </div>
+            </Panel>
+            <Dialog v-model:visible="retargetingPixelModel" modal :draggable="false" header="Add Retargeting Pixel" :style="{ width: '30vw' }">
+                <div class="field p-fluid">
+                    <label for="retargeting_pixel_name">Retargeting Pixel Name</label>
+                    <InputText id="retargeting_pixel_name" v-model="vv.retargeting_pixel.name.$model" :class="vv?.retargeting_pixel.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
+                    <small class="p-error" id="text-error">{{ vv?.retargeting_pixel.name?.$errors[0]?.$message || '&nbsp;' }}</small>
+                </div>         
+                <div class="field p-fluid">
+                    <label for="retargeting_pixel_name">Retargeting Pixel Code</label>
+                    <Textarea id="retargeting_pixel_name" v-model="vv.retargeting_pixel.code.$model" :class="vv?.retargeting_pixel.code?.$errors[0] ? 'p-invalid' : ''" rows="5" />
+
+                    <small class="p-error" id="text-error">{{ vv?.retargeting_pixel.code?.$errors[0]?.$message || '&nbsp;' }}</small>
+                </div>
+                <template #footer>
+                    <Button label="Cancle" severity="danger" icon="pi pi-times" @click="retargetingPixelModel = false" text />
+                    <Button label="Add Retargeting Pixel" icon="pi pi-check" @click="submitForm('retargeting-pixel')" autofocus />
+                </template>
+            </Dialog>
+        </div>
+    </div>
+</template>

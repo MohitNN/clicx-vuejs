@@ -43,6 +43,12 @@ export default [
                 component: () => import('@/views/Group/ManageRetargetingPixels.vue'),
                 meta: { requiredAuth: true }
             },
+            {
+                path: 'manage-pages',
+                name: 'ManagePages',
+                component: () => import('@/views/Group/ManagePages.vue'),
+                meta: { requiredAuth: true }
+            },
             
         ]
     },

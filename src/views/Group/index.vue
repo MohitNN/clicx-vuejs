@@ -1,17 +1,5 @@
-<template>
-    <div className="card">
-        <TabMenu :model="items" />
-    </div>
-    <router-view />
-</template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
-
-const router = useRouter();
-const route = useRoute();
-const active = ref(0);
-
+import { ref } from "vue";
 const items = ref([
     {
         label: 'Link Bank',
@@ -43,6 +31,17 @@ const items = ref([
         icon: 'pi pi-fw pi-server',
         to: 'retargeting-pixels'
     },
+    {
+        label: 'Pages',
+        icon: 'pi pi-fw pi-book',
+        to: 'manage-pages'
+    },
 ]);
 
 </script>
+<template>
+    <div className="card">
+        <TabMenu :model="items" />
+    </div>
+    <router-view />
+</template>
