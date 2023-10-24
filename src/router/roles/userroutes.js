@@ -44,9 +44,9 @@ export default [
                 meta: { requiredAuth: true }
             },
             {
-                path: 'manage-pages',
-                name: 'ManagePages',
-                component: () => import('@/views/Group/ManagePages.vue'),
+                path: 'holding-pages',
+                name: 'ManageHoldingPages',
+                component: () => import('@/views/Group/ManageHoldingPages.vue'),
                 meta: { requiredAuth: true }
             },
             

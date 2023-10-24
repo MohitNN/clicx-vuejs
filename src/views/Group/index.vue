@@ -32,9 +32,9 @@ const items = ref([
         to: 'retargeting-pixels'
     },
     {
-        label: 'Pages',
+        label: 'Holding Pages',
         icon: 'pi pi-fw pi-book',
-        to: 'manage-pages'
+        to: 'holding-pages'
     },
 ]);
 
