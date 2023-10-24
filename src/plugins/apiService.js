@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '@/store'
 
 const customAxios = axios.create({
-    baseURL: 'http://192.168.1.9:8000/api',
+    baseURL: import.meta.env.VITE_API_URL,
     timeout: 60000,
 });
 
