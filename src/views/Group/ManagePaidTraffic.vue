@@ -1,3 +1,199 @@
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required, helpers } from '@vuelidate/validators';
+import store from '@/store';
+import { useConfirm } from 'primevue/useconfirm';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
+const confirm = useConfirm();
+const paid_traffic_group = ref({
+    name: ''
+});
+const paid_traffic_provider = ref({
+    name: ''
+});
+const rules = {
+    paid_traffic_group: {
+        name: { required: helpers.withMessage('The Paid Traffic Group Name field is required', required) }
+    },
+    paid_traffic_provider: {
+        name: { required: helpers.withMessage('The Paid Traffic Provider Name field is required', required) }
+    }
+};
+const vv = useVuelidate(rules, { paid_traffic_group, paid_traffic_provider });
+const selectedPaidTrafficGroup = ref();
+const selectedPaidTrafficProvider = ref();
+const paidTrafficGroupList = computed(() => store.state.GroupStore.paidTrafficGroupList);
+const paidTrafficProviderList = computed(() => store.state.GroupStore.paidTrafficProviderList);
+
+const paidTrafficGroupModel = ref(false);
+const paidTrafficProviderModel = ref(false);
+
+const openModel = (modelType) => {
+    if (modelType == 'paid-traffic-group') {
+        vv.value.paid_traffic_group.$reset();
+        paid_traffic_group.value.name = '';
+        paid_traffic_group.value.paid_traffic_group_id = '';
+        paidTrafficGroupModel.value = true;
+    } else if (modelType == 'paid-traffic-provider') {
+        vv.value.paid_traffic_provider.$reset();
+        paid_traffic_provider.value.name = '';
+        paid_traffic_provider.value.paid_traffic_provider_id = '';
+        paidTrafficProviderModel.value = true;
+    }
+};
+
+const submitForm = (modelType) => {
+    if (modelType == 'paid-traffic-group') {
+        vv.value.paid_traffic_group.$touch();
+        if (vv.value.paid_traffic_group.$invalid) return;
+        let data = paid_traffic_group.value;
+        store
+            .dispatch('GroupStore/savePaidTrafficGroup', data)
+            .then((response) => {
+                if (response.data.status) {
+                    paidTrafficGroupModel.value = false;
+                    selectedPaidTrafficGroup.value = null;
+                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Group Successfully!', life: 3000 });
+                } else {
+                    toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    } else if (modelType == 'paid-traffic-provider') {
+        vv.value.paid_traffic_provider.$touch();
+        if (vv.value.paid_traffic_provider.$invalid) return;
+        let data = paid_traffic_provider.value;
+        store
+            .dispatch('GroupStore/savePaidTrafficProvider', data)
+            .then((response) => {
+                if (response.data.status) {
+                    paidTrafficProviderModel.value = false;
+                    selectedPaidTrafficProvider.value = null;
+                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Successfully!', life: 3000 });
+                } else {
+                    toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+};
+
+const editItems = (modelType) => {
+    if (modelType == 'paid-traffic-group') {
+        if (selectedPaidTrafficGroup.value) {
+            paid_traffic_group.value.name = selectedPaidTrafficGroup.value.name;
+            paid_traffic_group.value.paid_traffic_group_id = selectedPaidTrafficGroup.value.id;
+            paidTrafficGroupModel.value = true;
+        } else {
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Group!', life: 3000 });
+        }
+    } else if (modelType == 'paid-traffic-provider') {
+        if (selectedPaidTrafficProvider.value) {
+            paid_traffic_provider.value.name = selectedPaidTrafficProvider.value.name;
+            paid_traffic_provider.value.paid_traffic_provider_id = selectedPaidTrafficProvider.value.id;
+            paidTrafficProviderModel.value = true;
+        } else {
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Provider!', life: 3000 });
+        }
+    }
+};
+
+const deleteItems = (modelType) => { 
+    if (modelType == 'paid-traffic-group') {
+        if (selectedPaidTrafficGroup.value) {
+            let data = { paid_traffic_group_id: selectedPaidTrafficGroup.value.id };
+            confirm.require({
+                message: 'Are you sure you want to delete Paid Traffic Group?',
+                header: 'Delete Confirmation',
+                icon: 'pi pi-info-circle',
+                acceptClass: 'p-button-danger',
+                position: 'center',
+                accept: () => {
+                    store
+                        .dispatch('GroupStore/deletePaidTrafficGroup', data)
+                        .then((response) => {
+                            if (response.data.status) {
+                                selectedPaidTrafficGroup.value = null
+                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Group Deleted Successfully!', life: 3000 });
+                            } else {
+                                toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                },
+                reject: () => {
+                    toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+                }
+            });
+        } else {
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+        }
+    } else if (modelType == 'paid-traffic-provider') {
+        if (selectedPaidTrafficProvider.value) {
+            let data = { paid_traffic_provider_id: selectedPaidTrafficProvider.value.id };
+            confirm.require({
+                message: 'Are you sure you want to delete Paid Traffic Provider?',
+                header: 'Delete Confirmation',
+                icon: 'pi pi-info-circle',
+                acceptClass: 'p-button-danger',
+                position: 'center',
+                accept: () => {
+                    store
+                        .dispatch('GroupStore/deletePaidTrafficProvider', data)
+                        .then((response) => {
+                            if (response.data.status) {
+                                selectedPaidTrafficProvider.value = null
+                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Deleted Successfully!', life: 3000 });
+                            } else {
+                                toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                },
+                reject: () => {
+                    toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+                }
+            });
+        } else {
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+        }
+    }
+}
+
+const init = async () => {
+    await store
+        .dispatch('GroupStore/getPaidTrafficGroup')
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    await store
+        .dispatch('GroupStore/getPaidTrafficProvider')
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+onMounted(async () => {
+    await init();
+});
+</script>
+
 <template>
     <div class="grid">
         <div class="col-12 lg:col-6 xl:col-6">
@@ -60,183 +256,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useVuelidate } from '@vuelidate/core';
-import { required, email, helpers } from '@vuelidate/validators';
-import store from '@/store';
-import { useConfirm } from 'primevue/useconfirm';
-import { useToast } from 'primevue/usetoast';
-const toast = useToast();
-const confirm = useConfirm();
-const paid_traffic_group = ref({
-    name: ''
-});
-const paid_traffic_provider = ref({
-    name: ''
-});
-const rules = {
-    paid_traffic_group: {
-        name: { required: helpers.withMessage('The Paid Traffic Group Name field is required', required) }
-    },
-    paid_traffic_provider: {
-        name: { required: helpers.withMessage('The Paid Traffic Provider Name field is required', required) }
-    }
-};
-const vv = useVuelidate(rules, { paid_traffic_group, paid_traffic_provider });
-const selectedPaidTrafficGroup = ref();
-const selectedPaidTrafficProvider = ref();
-const paidTrafficGroupList = computed(() => store.state.GroupStore.paidTrafficGroupList);
-const paidTrafficProviderList = computed(() => store.state.GroupStore.paidTrafficProviderList);
-
-const paidTrafficGroupModel = ref(false);
-const paidTrafficProviderModel = ref(false);
-
-const openModel = (modelType) => {
-    if (modelType == 'paid-traffic-group') {
-        vv.value.paid_traffic_group.$reset();
-        paid_traffic_group.value.name = '';
-        paid_traffic_group.value.paid_traffic_group_id = '';
-        paidTrafficGroupModel.value = true;
-    } else if (modelType == 'paid-traffic-provider') {
-        vv.value.paid_traffic_provider.$reset();
-        paid_traffic_provider.value.name = '';
-        paid_traffic_provider.value.paid_traffic_provider_id = '';
-        paidTrafficProviderModel.value = true;
-    }
-};
-
-const submitForm = (modelType) => {
-    if (modelType == 'paid-traffic-group') {
-        vv.value.paid_traffic_group.$touch();
-        if (vv.value.paid_traffic_group.$invalid) return;
-        let data = paid_traffic_group.value;
-        store
-            .dispatch('GroupStore/savePaidTrafficGroup', data)
-            .then((response) => {
-                if (response.data.status) {
-                    paidTrafficGroupModel.value = false;
-                    selectedPaidTrafficGroup.value = null;
-                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Group Successfully!', life: 3000 });
-                } else {
-                    toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
-                }
-            })
-            .catch((error) => {});
-    } else if (modelType == 'paid-traffic-provider') {
-        vv.value.paid_traffic_provider.$touch();
-        if (vv.value.paid_traffic_provider.$invalid) return;
-        let data = paid_traffic_provider.value;
-        store
-            .dispatch('GroupStore/savePaidTrafficProvider', data)
-            .then((response) => {
-                if (response.data.status) {
-                    paidTrafficProviderModel.value = false;
-                    selectedPaidTrafficProvider.value = null;
-                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Successfully!', life: 3000 });
-                } else {
-                    toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
-                }
-            })
-            .catch((error) => {});
-    }
-};
-
-const editItems = (modelType) => {
-    if (modelType == 'paid-traffic-group') {
-        if (selectedPaidTrafficGroup.value) {
-            paid_traffic_group.value.name = selectedPaidTrafficGroup.value.name;
-            paid_traffic_group.value.paid_traffic_group_id = selectedPaidTrafficGroup.value.id;
-            paidTrafficGroupModel.value = true;
-        } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Group!', life: 3000 });
-        }
-    } else if (modelType == 'paid-traffic-provider') {
-        if (selectedPaidTrafficProvider.value) {
-            paid_traffic_provider.value.name = selectedPaidTrafficProvider.value.name;
-            paid_traffic_provider.value.paid_traffic_provider_id = selectedPaidTrafficProvider.value.id;
-            paidTrafficProviderModel.value = true;
-        } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Provider!', life: 3000 });
-        }
-    }
-};
-
-const deleteItems = (modelType) => { 
-    if (modelType == 'paid-traffic-group') {
-        if (selectedPaidTrafficGroup.value) {
-            let data = { paid_traffic_group_id: selectedPaidTrafficGroup.value.id };
-            confirm.require({
-                message: 'Are you sure you want to delete Paid Traffic Group?',
-                header: 'Delete Confirmation',
-                icon: 'pi pi-info-circle',
-                acceptClass: 'p-button-danger',
-                position: 'center',
-                accept: () => {
-                    store
-                        .dispatch('GroupStore/deletePaidTrafficGroup', data)
-                        .then((response) => {
-                            if (response.data.status) {
-                                selectedPaidTrafficGroup.value = null
-                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Group Deleted Successfully!', life: 3000 });
-                            } else {
-                                toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
-                            }
-                        })
-                        .catch((error) => {});
-                },
-                reject: () => {
-                    toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-                }
-            });
-        } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
-        }
-    } else if (modelType == 'paid-traffic-provider') {
-        if (selectedPaidTrafficProvider.value) {
-            let data = { paid_traffic_provider_id: selectedPaidTrafficProvider.value.id };
-            confirm.require({
-                message: 'Are you sure you want to delete Paid Traffic Provider?',
-                header: 'Delete Confirmation',
-                icon: 'pi pi-info-circle',
-                acceptClass: 'p-button-danger',
-                position: 'center',
-                accept: () => {
-                    store
-                        .dispatch('GroupStore/deletePaidTrafficProvider', data)
-                        .then((response) => {
-                            if (response.data.status) {
-                                selectedPaidTrafficProvider.value = null
-                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Deleted Successfully!', life: 3000 });
-                            } else {
-                                toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
-                            }
-                        })
-                        .catch((error) => {});
-                },
-                reject: () => {
-                    toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-                }
-            });
-        } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
-        }
-    }
-}
-
-const init = async () => {
-    await store
-        .dispatch('GroupStore/getPaidTrafficGroup')
-        .then((response) => {})
-        .catch((error) => {});
-    await store
-        .dispatch('GroupStore/getPaidTrafficProvider')
-        .then((response) => {})
-        .catch((error) => {});
-};
-
-onMounted(async () => {
-    await init();
-});
-</script>
