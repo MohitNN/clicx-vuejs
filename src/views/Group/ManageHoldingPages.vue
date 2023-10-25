@@ -23,22 +23,22 @@ const rules = {
     pending_page: {
         name: { required: helpers.withMessage('The Pending Page Name field is required', required) },
         url: {
-            required: helpers.withMessage('The Domain URL field is required', required),
-            url: helpers.withMessage(`The Domain URL must be URL and URL must start with 'http://' or 'https:// `, url)
+            required: helpers.withMessage('The Pending Page URL field is required', required),
+            url: helpers.withMessage(`The Pending Page URL must be URL and URL must start with 'http://' or 'https:// `, url)
         },
     },
     completed_page: {
         name: { required: helpers.withMessage('The Completed Page Name field is required', required) },
         url: {
-            required: helpers.withMessage('The Domain URL field is required', required),
-            url: helpers.withMessage(`The Domain URL must be URL and URL must start with 'http://' or 'https:// `, url)
+            required: helpers.withMessage('The Completed Page URL field is required', required),
+            url: helpers.withMessage(`The Completed Page URL must be URL and URL must start with 'http://' or 'https:// `, url)
         },
     },
     error_page: {
         name: { required: helpers.withMessage('The Error Page Name field is required', required) },
         url: {
-            required: helpers.withMessage('The Domain URL field is required', required),
-            url: helpers.withMessage(`The Domain URL must be URL and URL must start with 'http://' or 'https:// `, url)
+            required: helpers.withMessage('The Error Page URL field is required', required),
+            url: helpers.withMessage(`The Error Page URL must be URL and URL must start with 'http://' or 'https:// `, url)
         },
     },
 };
@@ -88,7 +88,7 @@ const submitForm = (modelType) => {
                     PendingPageModel.value = false;
                     selectedPendingPage.value = null;
                     init()
-                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Group Successfully!', life: 3000 });
+                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Pending Page Added Successfully!', life: 3000 });
                 } else {
                     toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                 }
@@ -108,7 +108,7 @@ const submitForm = (modelType) => {
                     CompletedPageModel.value = false;
                     selectedCompletedPage.value = null;
                     init()
-                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Successfully!', life: 3000 });
+                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Complated Page Added Successfully!', life: 3000 });
                 } else {
                     toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                 }
@@ -127,7 +127,7 @@ const submitForm = (modelType) => {
                     ErrorPageModel.value = false;
                     selectedErrorPage.value = null;
                     init()
-                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Successfully!', life: 3000 });
+                    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Error Page Added  Successfully!', life: 3000 });
                 } else {
                     toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                 }
@@ -146,7 +146,7 @@ const editItems = (modelType) => {
             pending_page.value.page_id = selectedPendingPage.value.id;
             PendingPageModel.value = true;
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Pending Page!', life: 3000 });
         }
     } else if (modelType == 'completed_page') {
         if (selectedCompletedPage.value) {
@@ -155,7 +155,7 @@ const editItems = (modelType) => {
             completed_page.value.page_id = selectedCompletedPage.value.id;
             CompletedPageModel.value = true;
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Provider!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Completed Page!', life: 3000 });
         }
     } else if (modelType == 'error_page') {
         if (selectedErrorPage.value) {
@@ -164,7 +164,7 @@ const editItems = (modelType) => {
             error_page.value.   page_id = selectedErrorPage.value.id;
             ErrorPageModel.value = true;
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Provider!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Error Page!', life: 3000 });
         }
     }
 };
@@ -174,7 +174,7 @@ const deleteItems = (modelType) => {
         if (selectedPendingPage.value) {
             let data = { page_id: selectedPendingPage.value.id };
             confirm.require({
-                message: 'Are you sure you want to delete Paid Traffic Group?',
+                message: 'Are you sure you want to delete Pending Page?',
                 header: 'Delete Confirmation',
                 icon: 'pi pi-info-circle',
                 acceptClass: 'p-button-danger',
@@ -186,7 +186,7 @@ const deleteItems = (modelType) => {
                             if (response.data.status) {
                                 selectedPendingPage.value = null
                                 init()
-                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Group Deleted Successfully!', life: 3000 });
+                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Pending Page Deleted Successfully!', life: 3000 });
                             } else {
                                 toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                             }
@@ -200,13 +200,13 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Pending Page!', life: 3000 });
         }
     } else if (modelType == 'completed_page') {
         if (selectedCompletedPage.value) {
             let data = { page_id: selectedCompletedPage.value.id };
             confirm.require({
-                message: 'Are you sure you want to delete Paid Traffic Provider?',
+                message: 'Are you sure you want to delete Completed Page?',
                 header: 'Delete Confirmation',
                 icon: 'pi pi-info-circle',
                 acceptClass: 'p-button-danger',
@@ -218,7 +218,7 @@ const deleteItems = (modelType) => {
                             if (response.data.status) {
                                 selectedCompletedPage.value = null
                                 init()
-                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Deleted Successfully!', life: 3000 });
+                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Completed Page Deleted Successfully!', life: 3000 });
                             } else {
                                 toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                             }
@@ -232,14 +232,14 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Completed Page!', life: 3000 });
         }
     }
     else if (modelType == 'error_page') {
         if (selectedErrorPage.value) {
             let data = { page_id: selectedErrorPage.value.id };
             confirm.require({
-                message: 'Are you sure you want to delete Paid Traffic Provider?',
+                message: 'Are you sure you want to delete Error Page?',
                 header: 'Delete Confirmation',
                 icon: 'pi pi-info-circle',
                 acceptClass: 'p-button-danger',
@@ -251,7 +251,7 @@ const deleteItems = (modelType) => {
                             if (response.data.status) {
                                 selectedErrorPage.value = null
                                 init()
-                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Paid Traffic Provider Deleted Successfully!', life: 3000 });
+                                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Error Page Deleted Successfully!', life: 3000 });
                             } else {
                                 toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
                             }
@@ -265,7 +265,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Error Page!', life: 3000 });
         }
     }
 }
@@ -363,7 +363,7 @@ onMounted(async () => {
             </Panel>
             <Dialog v-model:visible="CompletedPageModel" modal :draggable="false" header="Add Completed Page" :style="{ width: '30vw' }">
                 <div class="field p-fluid">
-                    <label for="completed_page_name">Paid Completed Page</label>
+                    <label for="completed_page_name">Completed Page Name</label>
                     <InputText id="completed_page_name" v-model="vv.completed_page.name.$model" :class="vv?.completed_page.name?.$errors[0] ? 'p-invalid' : ''" type="text" />
                     <small class="p-error" id="text-error">{{ vv?.completed_page.name?.$errors[0]?.$message || '&nbsp;' }}</small>
                 </div>
@@ -374,7 +374,7 @@ onMounted(async () => {
                 </div>
                 <template #footer>
                     <Button label="Cancle" severity="danger" icon="pi pi-times" @click="CompletedPageModel = false" text />
-                    <Button label="Add Paid Traffic Provider" icon="pi pi-check" @click="submitForm('completed_page')" autofocus />
+                    <Button label="Add Completed Page" icon="pi pi-check" @click="submitForm('completed_page')" autofocus />
                 </template>
             </Dialog>
         </div>
