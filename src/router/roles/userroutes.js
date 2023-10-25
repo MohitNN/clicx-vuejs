@@ -43,6 +43,12 @@ export default [
                 component: () => import('@/views/Group/ManageRetargetingPixels.vue'),
                 meta: { requiredAuth: true }
             },
+            {
+                path: 'holding-pages',
+                name: 'ManageHoldingPages',
+                component: () => import('@/views/Group/ManageHoldingPages.vue'),
+                meta: { requiredAuth: true }
+            },
             
         ]
     },

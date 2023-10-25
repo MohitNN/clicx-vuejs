@@ -22,6 +22,9 @@ const state = {
 
     //Domain
     userDomainList:[],
+
+    //Pages
+    userPageList:[],
 };
 
 const mutations = {
@@ -65,6 +68,11 @@ const mutations = {
     //Domain
     SET_DOMAIN_LIST(state, value) {
         state.userDomainList = value;
+    },
+
+    //Pages
+    SET_PAGES(state, value) {
+        state.userPageList = value;
     },
 };
 
@@ -296,6 +304,29 @@ const actions = {
         let resp = await axios.post('user/groups/delete-domain', data);
         if (resp.data.status == true) {
             dispatch('getDomain');
+        }
+        return resp;
+    },
+    //Domain
+    async savePage({ dispatch }, data) {
+        let resp = await axios.post('user/groups/save-pages', data);
+        if (resp.data.status == true) {
+            dispatch('getPage');
+        }
+        return resp;
+    },
+    async getPage({ commit }, page_type) {
+        console.log("page_type",page_type);
+        let resp = await axios.get(`user/groups/${page_type}/get-pages-list`);
+        if (resp.data.status == true) { 
+            commit('SET_PAGES', resp.data.data);
+        }
+        return resp;
+    },
+    async deletePage({ dispatch }, data) {
+        let resp = await axios.post('user/groups/delete-page', data);
+        if (resp.data.status == true) {
+            dispatch('getPage');
         }
         return resp;
     },
