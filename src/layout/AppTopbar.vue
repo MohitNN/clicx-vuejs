@@ -1,45 +1,7 @@
 
 
-<template>
-    <div class="layout-topbar">
-        <router-link to="/" class="layout-topbar-logo">
-            <img :src="logoUrl" alt="logo" />
-            <span>SAKAI</span>
-        </router-link>
-
-        <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
-            <i class="pi pi-bars"></i>
-        </button>
-        <!-- <Breadcrumb :home="home" :model="items"  class="ml-3"/> -->
-        <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
-            <i class="pi pi-ellipsis-v"></i>
-        </button>
-
-        <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <!-- <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
-            </button> -->
-            
-            <Menu ref="menu" :model="overlayMenuItems" :popup="true" />
-            <button @click="toggleMenu" type="button" class="p-link layout-topbar-button">
-                <i class="pi pi-user"></i>
-                <span>Profile</span>
-            </button>
-
-            <!-- <button @click="onSettingsClick()" class="p-link layout-topbar-button">
-                <i class="pi pi-cog"></i>
-                <span>Settings</span>
-            </button> -->
-            <!-- <Menubar :model="nestedMenuitems">
-                    
-            </Menubar> -->
-        </div>
-    </div>
-</template>
-
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount , watch  } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 import { useConfirm } from "primevue/useconfirm";
@@ -48,8 +10,8 @@ import { useToast } from "primevue/usetoast";
 const confirm = useConfirm();
 const toast = useToast();
 
-const { layoutConfig, onMenuToggle } = useLayout();
-
+const { layoutConfig, onMenuToggle , changeThemeSettings } = useLayout();
+const switchValue = ref(false)
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
@@ -68,6 +30,29 @@ onMounted(() => {
 //     {label: 'Backpacks'},
 //     {label: 'Item'}
 // ]);
+
+const onChangeTheme = (theme, mode) => {
+    const elementId = 'theme-css';
+    const linkElement = document.getElementById(elementId);
+    const cloneLinkElement = linkElement.cloneNode(true);
+    const newThemeUrl = linkElement.getAttribute('href').replace(layoutConfig.theme.value, theme);
+    cloneLinkElement.setAttribute('id', elementId + '-clone');
+    cloneLinkElement.setAttribute('href', newThemeUrl);
+    cloneLinkElement.addEventListener('load', () => {
+        linkElement.remove();
+        cloneLinkElement.setAttribute('id', elementId);
+        changeThemeSettings(theme, mode === 'dark');
+    });
+    linkElement.parentNode.insertBefore(cloneLinkElement, linkElement.nextSibling);
+};
+watch(switchValue, (newQuestion, oldQuestion) => {
+  if(newQuestion){
+    onChangeTheme('vela-blue', 'dark')
+  }else{
+    onChangeTheme('lara-light-indigo', 'light')
+  }
+})
+
 onBeforeUnmount(() => {
     unbindOutsideClickListener();
 });
@@ -125,6 +110,7 @@ const logout = (() => {
 
         }
     }).catch((error) => {
+        console.log(error);
         store.dispatch('globleStore/setcounter')
     })
 })
@@ -166,4 +152,52 @@ const toggleMenu = (event) => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<template>
+    <div class="layout-topbar">
+        <router-link to="/" class="layout-topbar-logo">
+            <img :src="logoUrl" alt="logo" />
+            <span>SAKAI</span>
+        </router-link>
+
+        <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
+            <i class="pi pi-bars"></i>
+        </button>
+        <!-- <Breadcrumb :home="home" :model="items"  class="ml-3"/> -->
+        <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
+            <i class="pi pi-ellipsis-v"></i>
+        </button>
+
+        <div class="layout-topbar-menu" :class="topbarMenuClasses">
+            <!-- <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
+                <i class="pi pi-calendar"></i>
+                <span>Calendar</span>
+            </button> -->
+            
+                <Menu ref="menu" :model="overlayMenuItems" :popup="true" />
+                <div class="flex align-items-center">
+                    <ToggleButton v-model="switchValue" onLabel="" offLabel="" onIcon="pi pi-sun" offIcon="pi pi-moon" class="w-2rem h-2rem p-button-rounded p-2" />
+                    <button @click="toggleMenu" type="button" class="p-link layout-topbar-button">
+                        <i class="pi pi-user"></i>
+                        <span>Profile</span>
+                    </button>
+                </div>
+
+            <!-- <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+                <i class="pi pi-cog"></i>
+                <span>Settings</span>
+            </button> -->
+            <!-- <Menubar :model="nestedMenuitems">
+                    
+            </Menubar> -->
+        </div>
+    </div>
+</template>
+
+<style>
+.pi-sun{
+    color: white !important;
+}
+.pi-moon{
+    color: #6366F1 !important;
+}
+</style>
