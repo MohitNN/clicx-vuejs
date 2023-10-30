@@ -10,7 +10,7 @@ stores = {
     GroupStore,
 }
 const vuexLocal = new VuexPersistence({
-    modules: ['auth']
+    modules: ['auth','globleStore']
 })
 export default createStore({
     modules: stores,
