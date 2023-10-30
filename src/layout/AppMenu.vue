@@ -20,7 +20,7 @@ const model = ref([
                     {
                         label: 'Create New Link',
                         icon: 'pi pi-fw pi-sign-in',
-                        to: '/link-bank/create-new-link'
+                        to: '/link-bank/create-new-link-bank'
                     },
                     {
                         label: 'Link Bank',

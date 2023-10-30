@@ -15,9 +15,25 @@ const actions = {
     async saveLinkBank({ dispatch }, data) {
         let resp = await axios.post('user/link-bank/create-new-link', data);
         if (resp.data.status == true) {
+            dispatch('getLinkBank');
+        }
+        return resp;
+    },
+    async getLinkBank({ commit }, data) {
+        let resp = await axios.get('user/link-bank/get-links?page=' + data.page);
+        if (resp.data.status == true) {
+            commit('SET_LINKBANK_LIST', resp.data.data);
+        }
+        return resp;
+    },
+    async deleteLinkBank({ dispatch }, data) {
+        let resp = await axios.post('user/link-bank/delete-links',data);
+        if (resp.data.status == true) {
+            dispatch('getLinkBank' , data);
         }
         return resp;
     }
+
 };
 export default {
     namespaced: true,

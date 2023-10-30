@@ -4,9 +4,17 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, helpers, url } from '@vuelidate/validators';
 import { useToast } from 'primevue/usetoast';
 import store from '@/store';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const toast = useToast();
 const minDate = new Date();
+const props = defineProps({
+    id : {
+        default: null,
+        required : false
+    },
+});
 const statusList = ['Pending', 'Active', 'Completed', 'Evergreen', 'My Links'];
 const link_bank = ref({
     name: '',
@@ -23,7 +31,7 @@ const link_bank = ref({
     retargeting_pixel_id: null,
     start_date: null,
     end_date: null,
-    is_advance_option: true
+    is_advance_option: false
 });
 
 const selectedStartDate = ref(null);
@@ -252,7 +260,8 @@ const saveLinkBank = () => {
         .dispatch('LinkbankStore/saveLinkBank', data)
         .then((response) => {
             if (response.data.status) {
-                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Link Sequence Successfully!', life: 3000 });
+                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Link Bank Successfully!', life: 3000 });
+                router.push({ name: 'LinkBankMyLinks' });
             } else {
                 toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
             }

@@ -5,6 +5,8 @@ import { ref, computed, onMounted, onBeforeUnmount , watch  } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 import { useConfirm } from "primevue/useconfirm";
+import logoFileDark from "@/assets/images/logo-dark.svg";
+import logoFileWhite from "@/assets/images/logo-white.svg";
 import store from '@/store'
 import { useToast } from "primevue/usetoast";
 const confirm = useConfirm();
@@ -58,7 +60,8 @@ onBeforeUnmount(() => {
 });
 
 const logoUrl = computed(() => {
-    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+    // return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+    return layoutConfig.darkTheme.value;
 });
 
 const onTopBarMenuButton = () => {
@@ -155,7 +158,7 @@ const toggleMenu = (event) => {
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img :src="logoUrl" alt="logo" />
+            <img :src="logoUrl ? logoFileWhite : logoFileDark " alt="logo" />
             <span>SAKAI</span>
         </router-link>
 
