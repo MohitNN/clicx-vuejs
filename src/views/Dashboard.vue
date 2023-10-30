@@ -10,6 +10,69 @@ const { isDarkTheme, layoutConfig } = useLayout();
 let documentStyle = getComputedStyle(document.documentElement);
 const pieData = ref(null);
 
+const demoTableData = ref([
+{
+                    id: '1000',
+                    code: 'f230fh0g3',
+                    name: 'Bamboo Watch',
+                    description: 'Product Description',
+                    image: 'bamboo-watch.jpg',
+                    price: 65,
+                    category: 'Accessories',
+                    quantity: 24,
+                    inventoryStatus: 'INSTOCK',
+                    rating: 5
+                },
+                {
+                    id: '1001',
+                    code: 'nvklal433',
+                    name: 'Black Watch',
+                    description: 'Product Description',
+                    image: 'black-watch.jpg',
+                    price: 72,
+                    category: 'Accessories',
+                    quantity: 61,
+                    inventoryStatus: 'INSTOCK',
+                    rating: 4
+                },
+                {
+                    id: '1002',
+                    code: 'zz21cz3c1',
+                    name: 'Blue Band',
+                    description: 'Product Description',
+                    image: 'blue-band.jpg',
+                    price: 79,
+                    category: 'Fitness',
+                    quantity: 2,
+                    inventoryStatus: 'LOWSTOCK',
+                    rating: 3
+                },
+                {
+                    id: '1003',
+                    code: '244wgerg2',
+                    name: 'Blue T-Shirt',
+                    description: 'Product Description',
+                    image: 'blue-t-shirt.jpg',
+                    price: 29,
+                    category: 'Clothing',
+                    quantity: 25,
+                    inventoryStatus: 'INSTOCK',
+                    rating: 5
+                },
+                {
+                    id: '1004',
+                    code: 'h456wer53',
+                    name: 'Bracelet',
+                    description: 'Product Description',
+                    image: 'bracelet.jpg',
+                    price: 15,
+                    category: 'Accessories',
+                    quantity: 73,
+                    inventoryStatus: 'INSTOCK',
+                    rating: 4
+                },
+])
+
 pieData.value = {
     labels: ['A', 'B', 'C'],
     datasets: [
@@ -194,34 +257,48 @@ watch(
         </div> -->
 
         <div>
-            <div class="col-12 xl:flex">
-                <div class="col-12 py-0 xl:col-6">
+            <div class=" xl:flex">
+                <div class="col-12 xl:col-6">
                     <div class="card">
                         <LeadMapChart />
                     </div>
                 </div>
                 <div class="xl:col-6 col-12">
-                    <div class="xl:col-12 col-12 py-0">
-                        <div class="flex flex-wrap h-fit card justify-content-around">
-                            <div v-for="(item, index) in 3" :key="index" class=" col-5">
+                    <div class="">
+                        <div class="flex flex-wrap h-fit card justify-content-between">
+                            <div v-for="(item, index) in 3" :key="index" class=" col-6">
                                 <label for="">Title</label>
-                                <ProgressBar :value="50"></ProgressBar>
+                                <div class="flex">
+                                    <div class="col-11 p-0">
+                                        <ProgressBar :value="50"></ProgressBar>
+                                    </div>
+                                    <div class="col-1 p-0">
+                                        <div class="ml-2">8</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div v-for="(item, index) in 3" :key="index" class=" col-5">
+                            <div v-for="(item, index) in 3" :key="index" class=" col-6">
                                 <label for="">Title</label>
-                                <ProgressBar :value="50"></ProgressBar>
+                                <div class="flex">
+                                    <div class="col-11 p-0">
+                                        <ProgressBar :value="50"></ProgressBar>
+                                    </div>
+                                    <div class="col-1 p-0">
+                                        <div class="ml-2">8</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <div class="col-12 xl:col-12 xl:flex pt-0">
-                            <div class="col-12 xl:col-6 pt-4 xl:pr-3 xl:pl-0 pb-2">
+                        <div class="xl:flex xl:pt-0 pt-4">
+                            <div class="col-12 xl:col-6 xl:pt-4 xl:pr-3 xl:pl-0 pl-0 pr-0">
                                 <div class="card flex flex-column align-items-center">
                                     <h5 class="text-left w-full">Pie Chart</h5>
                                     <Chart type="pie" :data="pieData" :options="pieOptions"></Chart>
                                 </div>
                             </div>
-                            <div class="col-12 xl:col-6 xl:pr-0 xl:pl-3 pt-4">
+                            <div class="col-12 xl:col-6 xl:pr-0 pl-0 pr-0 xl:pl-3 xl:pt-4">
                                 <div class="card flex flex-column align-items-center">
                                     <h5 class="text-left w-full">Doughnut Chart</h5>
                                     <Chart type="doughnut" :data="pieData" :options="pieOptions"></Chart>
@@ -232,8 +309,8 @@ watch(
                 </div>
             </div>
             <div class="w-full">
-                <div class="flex">
-                    <div class="col-12 md:col-6 lg:col-3">
+                <div class="md:flex flex-wrap">
+                    <div class="col-12 md:col-6 pt-0 xl:p-3 lg:col-3">
                         <div class="surface-card shadow-2 p-3 border-round">
                             <div class="flex justify-content-between mb-3">
                                 <div>
@@ -248,7 +325,16 @@ watch(
                             <span class="text-green-500 font-medium">24 new </span>
                             <span class="text-500">since last visit</span>
                         </div>
+                        <div>
+                            <DataTable :value="products" class="scrollbar mt-2" id="style-1" tableStyle="min-width: 50rem">
+                                <Column field="code" header="Code"></Column>
+                                <Column field="name" header="Name"></Column>
+                                <Column field="category" header="Category"></Column>
+                                <Column field="quantity" header="Quantity"></Column>
+                            </DataTable>
+                        </div>
                     </div>
+                    
                     <div class="col-12 md:col-6 lg:col-3">
                         <div class="surface-card shadow-2 p-3 border-round">
                             <div class="flex justify-content-between mb-3">
@@ -263,6 +349,14 @@ watch(
                             </div>
                             <span class="text-green-500 font-medium">%52+ </span>
                             <span class="text-500">since last week</span>
+                        </div>
+                        <div>
+                            <DataTable :value="products" class="scrollbar mt-2" id="style-1" tableStyle="min-width: 50rem">
+                                <Column field="code" header="Code"></Column>
+                                <Column field="name" header="Name"></Column>
+                                <Column field="category" header="Category"></Column>
+                                <Column field="quantity" header="Quantity"></Column>
+                            </DataTable>
                         </div>
                     </div>
                     <div class="col-12 md:col-6 lg:col-3">
@@ -280,6 +374,14 @@ watch(
                             <span class="text-green-500 font-medium">520 </span>
                             <span class="text-500">newly registered</span>
                         </div>
+                        <div>
+                            <DataTable :value="products" class="scrollbar mt-2" id="style-1" tableStyle="min-width: 50rem">
+                                <Column field="code" header="Code"></Column>
+                                <Column field="name" header="Name"></Column>
+                                <Column field="category" header="Category"></Column>
+                                <Column field="quantity" header="Quantity"></Column>
+                            </DataTable>
+                        </div>
                     </div>
                     <div class="col-12 md:col-6 lg:col-3">
                         <div class="surface-card shadow-2 p-3 border-round">
@@ -295,6 +397,14 @@ watch(
                             </div>
                             <span class="text-green-500 font-medium">85 </span>
                             <span class="text-500">responded</span>
+                        </div>
+                        <div>
+                            <DataTable :value="products" class="scrollbar mt-2" id="style-1" tableStyle="min-width: 50rem">
+                                <Column field="code" header="Code"></Column>
+                                <Column field="name" header="Name"></Column>
+                                <Column field="category" header="Category"></Column>
+                                <Column field="quantity" header="Quantity"></Column>
+                            </DataTable>
                         </div>
                     </div>
                 </div>
@@ -453,9 +563,62 @@ watch(
         </div> -->
     </div>
 </template>
-<style>
+<style  >
 .card .p-chart canvas {
-    height: 235px !important;
+    height: 240px !important;
     width: 235px !important;
+}
+.p-datatable{
+    height: 215px !important;
+    overflow-y: scroll !important;
+}
+.p-datatable-table{
+    min-width: 0px !important;
+}
+.p-column-title{
+    font-size: 10px !important;
+}
+td{
+    font-size: 10px !important;
+}
+.p-datatable .p-datatable-tbody > tr > td{
+    padding: 0.5rem 1rem !important;
+}
+.p-datatable .p-datatable-thead > tr > th{
+    padding: 0.5rem 1rem !important;
+}
+
+thead{
+    position: sticky !important;
+    top: 0 !important;
+}
+
+
+</style>
+<style scoped>
+.scrollbar
+{
+	overflow-y: auto;
+}
+
+#style-1::-webkit-scrollbar-track
+{
+	background-color: #F5F5F5;
+    
+}
+
+#style-1::-webkit-scrollbar
+{
+	width: 7px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+	background-color: #F5F5F5;
+}
+
+#style-1::-webkit-scrollbar-thumb
+{
+    border-radius: 12px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #aca9a9;
 }
 </style>

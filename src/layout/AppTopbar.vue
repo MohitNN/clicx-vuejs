@@ -13,11 +13,10 @@ const confirm = useConfirm();
 const toast = useToast();
 
 const { layoutConfig, onMenuToggle , changeThemeSettings } = useLayout();
-const switchValue = ref(false)
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
-
+const darkMode = computed(() => store.state.globleStore.darkMode);
 onMounted(() => {
     bindOutsideClickListener();
 });
@@ -47,13 +46,26 @@ const onChangeTheme = (theme, mode) => {
     });
     linkElement.parentNode.insertBefore(cloneLinkElement, linkElement.nextSibling);
 };
-watch(switchValue, (newQuestion, oldQuestion) => {
-  if(newQuestion){
-    onChangeTheme('vela-blue', 'dark')
-  }else{
-    onChangeTheme('lara-light-indigo', 'light')
-  }
+
+onMounted(() => {
+    if(darkMode.value){
+        onChangeTheme('vela-blue', 'dark')
+    }else{
+        onChangeTheme('lara-light-indigo', 'light')
+    }
 })
+
+const setMode = () => {
+    if(darkMode.value){
+        store.dispatch('globleStore/setDarkMode',false)
+        onChangeTheme('lara-light-indigo', 'light')
+    }else{
+        store.dispatch('globleStore/setDarkMode',true) 
+        onChangeTheme('vela-blue', 'dark')
+    }
+}
+
+
 
 onBeforeUnmount(() => {
     unbindOutsideClickListener();
@@ -178,7 +190,7 @@ const toggleMenu = (event) => {
             
                 <Menu ref="menu" :model="overlayMenuItems" :popup="true" />
                 <div class="flex align-items-center">
-                    <ToggleButton v-model="switchValue" onLabel="" offLabel="" onIcon="pi pi-sun" offIcon="pi pi-moon" class="w-2rem h-2rem p-button-rounded p-2" />
+                    <ToggleButton @change="setMode()" onLabel="" offLabel="" onIcon="pi pi-sun" offIcon="pi pi-moon" class="w-2rem h-2rem p-button-rounded p-2" />
                     <button @click="toggleMenu" type="button" class="p-link layout-topbar-button">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>

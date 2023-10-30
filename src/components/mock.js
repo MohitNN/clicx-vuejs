@@ -1,68 +1,110 @@
 export default [
-    {
-      latitude: 40.717079,
-      longitude: -74.00116,
-      size: 6,
-      tooltip: 'New York',
-    },
-    {
-      latitude: 33.145235,
-      longitude: -83.811834,
-      size: 7,
-      tooltip: 'Oconee National Forest',
-    },
-    {
-      latitude: 37.792032,
-      longitude: -122.394613,
-      size: 4,
-      tooltip: 'San Francisco',
-    },
-    {
-      latitude: 26.935080,
-      longitude: -80.851766,
-      size: 9,
-      tooltip: 'Lake Okeechobee',
-    },
-    {
-      latitude: 36.331308,
-      longitude: -83.336050,
-      size: 4,
-      tooltip: 'Grainger County',
-    },
-    {
-      latitude: 36.269356,
-      longitude: -76.587477,
-      size: 8,
-      tooltip: 'Chowan County',
-    },
-    {
-      latitude: 30.700644,
-      longitude: -95.145249,
-      size: 6,
-      tooltip: 'Lake Livingston',
-    },
-    {
-      latitude: 34.546708,
-      longitude: -90.211471,
-      size: 5,
-      tooltip: 'Tunica County',
-    },
-    {
-      latitude: 32.628599,
-      longitude: -103.675115,
-      size: 5,
-      tooltip: 'Lea County',
-    },
-    {
-      latitude: 40.456692,
-      longitude: -83.522688,
-      size: 5,
-      tooltip: 'Union County',
-    },
-    {
-      latitude: 33.844630,
-      longitude: -118.157483,
-      size: 6,
-      tooltip: 'Lakewood Mutual',
-    }
+  {
+    title: "Brussels",
+    latitude: 50.8371,
+    longitude: 4.3676,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Copenhagen",
+    latitude: 55.6763,
+    longitude: 12.5681,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Paris",
+    latitude: 48.8567,
+    longitude: 2.351,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Reykjavik",
+    latitude: 64.1353,
+    longitude: -21.8952,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Moscow",
+    latitude: 55.7558,
+    longitude: 37.6176,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Madrid",
+    latitude: 40.4167,
+    longitude: -3.7033,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "London",
+    latitude: 51.5002,
+    longitude: -0.1262,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Peking",
+    latitude: 39.9056,
+    longitude: 116.3958,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "New Delhi",
+    latitude: 28.6353,
+    longitude: 77.225,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Tokyo",
+    latitude: 35.6785,
+    longitude: 139.6823,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Ankara",
+    latitude: 39.9439,
+    longitude: 32.856,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Buenos Aires",
+    latitude: -34.6118,
+    longitude: -58.4173,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Brasilia",
+    latitude: -15.7801,
+    longitude: -47.9292,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Ottawa",
+    latitude: 45.4235,
+    longitude: -75.6979,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Washington",
+    latitude: 38.8921,
+    longitude: -77.0241,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Kinshasa",
+    latitude: -4.3369,
+    longitude: 15.3271,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Cairo",
+    latitude: 30.0571,
+    longitude: 31.2272,
+    url: "http://www.amcharts.com"
+},
+{
+    title: "Pretoria",
+    latitude: -25.7463,
+    longitude: 28.1876,
+    url: "http://www.amcharts.com"
+}
   ]
