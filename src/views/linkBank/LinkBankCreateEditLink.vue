@@ -4,16 +4,18 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, helpers, url } from '@vuelidate/validators';
 import { useToast } from 'primevue/usetoast';
 import store from '@/store';
+import dayjs from "dayjs";
+import moment from 'moment';
 import { useRouter } from 'vue-router';
+
 const router = useRouter();
 
 const toast = useToast();
-const minDate = new Date();
 const props = defineProps({
-    id : {
+    id: {
         default: null,
-        required : false
-    },
+        required: false
+    }
 });
 const statusList = ['Pending', 'Active', 'Completed', 'Evergreen', 'My Links'];
 const link_bank = ref({
@@ -33,6 +35,9 @@ const link_bank = ref({
     end_date: null,
     is_advance_option: false
 });
+
+const minDate = ref(new Date());
+
 
 const selectedStartDate = ref(null);
 const selectedEndDate = ref(null);
@@ -111,8 +116,11 @@ const getGroupList = ref([]);
 const getDomain = ref([]);
 const getRetargetingPixel = ref([]);
 const getLinkPlatformList = ref([]);
-onMounted(() => {
+onMounted(async () => {
     init();
+    if (props.id) {
+         await editLinkData();
+    }
 });
 
 const init = async () => {
@@ -157,6 +165,42 @@ const init = async () => {
             console.log(error);
         });
 };
+
+const editLinkData = async () => {
+    let data = { link_bank_id: props.id };
+    store.dispatch('globleStore/setcounter')
+    await store
+        .dispatch('LinkbankStore/getSingleLinkBank', data)
+        .then((response) => {
+            if(response.data.status) {
+                let resData = response.data.data
+                link_bank.value = {
+                    link_bank_id: resData.id ? resData.id : '',
+                    name: resData.name ? resData.name : '',
+                    destination_link: resData.destination_link ? resData.destination_link : '',
+                    status: resData.status ? resData.status : 'Active',
+                    is_domain_setting: resData.is_domain_setting ? resData.is_domain_setting : 'system-domain',
+                    visible_link: resData.visible_link ? resData.visible_link : '',
+                    additional_notes: resData.additional_notes ? resData.additional_notes : '',
+                    domain_user_id: resData.domain_user_id ? resData.domain_user_id : '',
+                    user_id: resData.user_id ? resData.user_id : '',
+                    vendor_id: resData.vendor_id ? resData.vendor_id : '',
+                    group_id: resData.group_id ? resData.group_id : '',
+                    link_platform_id: resData.link_platform_id ? resData.link_platform_id : '',
+                    retargeting_pixel_id: resData.retargeting_pixel_id ? resData.retargeting_pixel_id : '',
+                    start_date: resData.start_date ? moment(resData.start_date).format('MM/DD/YYYY hh:mm a') : null,
+                    end_date: resData.end_date ? moment(resData.end_date).format('MM/DD/YYYY hh:mm a') : null,
+                    is_advance_option: resData.is_advance_option == 1 ? true : false
+                };
+                store.dispatch('globleStore/setcounter')
+            }
+        })
+        .catch((error) => {
+            store.dispatch('globleStore/setcounter')
+            console.log(error);
+        });
+};
+
 const modalOpen = (name, label, textareaname) => {
     dialog.value.name = name;
     dialog.value.label = label;
@@ -256,17 +300,22 @@ const saveLinkBank = () => {
     link_vv.value.link_bank.$touch();
     if (link_vv.value.link_bank.$invalid) return;
     let data = link_bank.value;
+    store.dispatch('globleStore/setcounter')
     store
         .dispatch('LinkbankStore/saveLinkBank', data)
         .then((response) => {
             if (response.data.status) {
+                store.dispatch('globleStore/setcounter')
                 toast.add({ severity: 'success', summary: 'Success Message', detail: 'Link Bank Successfully!', life: 3000 });
                 router.push({ name: 'LinkBankMyLinks' });
             } else {
+                store.dispatch('globleStore/setcounter')
                 toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
             }
         })
-        .catch((error) => {});
+        .catch((error) => {
+            store.dispatch('globleStore/setcounter')
+        });
 };
 const reset = () => {
     model_value.value.name = '';
@@ -276,7 +325,6 @@ const reset = () => {
         pixel_code: ''
     };
 };
-
 </script>
 <template>
     <Dialog @hide="vv.$reset(), vv1.$reset(), reset()" v-model:visible="ModelShow" modal :draggable="false" :header="dialog.label" :style="{ width: '30vw' }">
@@ -445,13 +493,13 @@ const reset = () => {
                     <div class="col-12 flex align-items-center">
                         <div class="col-4 pl-0">Start Date</div>
                         <div class="col-8 pl-2 pr-0">
-                            <Calendar id="calendar-12h"  v-model="link_bank.start_date" :minDate="minDate" showButtonBar showTime hourFormat="12" />
+                            <Calendar id="calendar-12h" v-model="link_bank.start_date"  showButtonBar showTime hourFormat="12" />
                         </div>
                     </div>
                     <div class="col-12 mt-5 flex align-items-center">
                         <div class="col-4 pl-0">End Date</div>
                         <div class="col-8 pl-2 pr-0">
-                            <Calendar id="calendar-12h" v-model="link_bank.end_date"  :minDate="minDate" showButtonBar showTime hourFormat="12" />
+                            <Calendar id="calendar-12h"  v-model="link_bank.end_date"  showButtonBar showTime hourFormat="12" />
                         </div>
                     </div>
                 </div>

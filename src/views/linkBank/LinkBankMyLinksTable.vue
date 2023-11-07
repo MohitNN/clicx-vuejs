@@ -74,7 +74,6 @@ const items = [
         icon: 'pi pi-pencil',
         command: () => {
             router.push({ name: 'LinkBankEditLink' , params : { id : selected_link_bank_id.value } });
-            toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
         }
     },
     {

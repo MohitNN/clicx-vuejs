@@ -26,6 +26,10 @@ const actions = {
         }
         return resp;
     },
+    async getSingleLinkBank({ commit }, data) {
+        let resp = await axios.get('user/link-bank/get-links/'+data.link_bank_id);
+        return resp;
+    },
     async deleteLinkBank({ dispatch }, data) {
         let resp = await axios.post('user/link-bank/delete-links',data);
         if (resp.data.status == true) {

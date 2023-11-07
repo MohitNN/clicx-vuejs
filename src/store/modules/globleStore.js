@@ -19,7 +19,6 @@ const getters = {
 
 const actions = {
     async setcounter({ commit }, data) {
-        console.log(data);
         commit("ADD_COUNTER");
     },
     async setDarkMode({ commit }, data) {
