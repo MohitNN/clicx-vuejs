@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import VueElementLoading from "vue-element-loading";
+import moment from 'moment';
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
 import Accordion from 'primevue/accordion';
@@ -117,6 +118,7 @@ const tostOptions = {
 };
 
 app.use(router);
+app.provide("moment", moment);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);

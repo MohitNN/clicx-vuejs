@@ -1,11 +1,13 @@
 <script setup>
 import { integer } from '@vuelidate/validators';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
+import config from '@/configService.js';
 import store from '@/store';
 const router = useRouter();
+const moment = inject('moment');
 const toast = useToast();
 const confirm = useConfirm();
 const props = defineProps({
@@ -21,19 +23,85 @@ const props = defineProps({
 });
 
 const menu = ref();
+const lableMenu = ref();
 const page = ref(1);
 const selected_link_bank_id = ref(null);
 const selected_link_bank = ref(null);
+const selected_label = ref(null);
 const splitbutton = ref();
-const toggle = (event, selected_link_bank_data) => {
-    menu.value.toggle(event);
-    selected_link_bank.value = selected_link_bank_data;
-    selected_link_bank_id.value = selected_link_bank_data.id;
+const toggle = (event, selected_link_bank_data, type) => {
+    if (type == 'action') {
+        menu.value.toggle(event);
+        selected_link_bank.value = selected_link_bank_data;
+        selected_link_bank_id.value = selected_link_bank_data.id;
+    } else {
+        lableMenu.value.toggle(event);
+        selected_link_bank_id.value = selected_link_bank_data.id;
+    }
+};
+
+const statusLable = (statusLable) => {
+    let status = config.link_status.find((item) => item.status === statusLable);
+    if (status) {
+        return status.color;
+    }
+    return '';
+};
+
+const changeLabel = (status) => {
+    let data = { link_bank_id: selected_link_bank_id.value, status: status , page : page.value };
+    store
+        .dispatch('LinkbankStore/changeStatus', data)
+        .then((response) => {
+            if (response.data.status) {
+                selected_link_bank_id.value = null;
+                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Link Bank Status Updated Successfully!', life: 3000 });
+            } else {
+                toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
+            }
+        })
+        .catch((error) => {
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
+        });
 };
 
 const linkAction = (link_bank_id, link_action_type) => {
     alert(link_bank_id, link_action_type);
 };
+
+const lableItems = [
+    {
+        label: 'Pending',
+        command: () => {
+            changeLabel('Pending')
+        }
+    },
+    {
+        label: 'Active',
+        command: () => {
+            changeLabel('Active')
+        }
+    },
+    {
+        label: 'Completed',
+        command: () => {
+            changeLabel('Completed')
+        }
+    },
+    {
+        label: 'Evergreen',
+        command: () => {
+            changeLabel('Evergreen')
+        }
+    },
+    {
+        label: 'My Links',
+        command: () => {
+            changeLabel('My Links')
+        }
+    }
+];
+
 const items = [
     {
         label: 'Delete Link',
@@ -73,7 +141,7 @@ const items = [
         action_type: 'edit-link',
         icon: 'pi pi-pencil',
         command: () => {
-            router.push({ name: 'LinkBankEditLink' , params : { id : selected_link_bank_id.value } });
+            router.push({ name: 'LinkBankEditLink', params: { id: selected_link_bank_id.value } });
         }
     },
     {
@@ -121,9 +189,7 @@ const items = [
 <template>
     <DataTable :value="linkBanklList.data" paginator :rows="20" dataKey="id" filterDisplay="row" removableSort tableStyle="min-width: 50rem">
         <template #empty>
-            <center>
-                No Links Found. 
-            </center> 
+            <center>No Links Found.</center>
         </template>
         <Column field="work_status" header="#" style="width: 2%"></Column>
         <Column field="name" header="Link Name" filterField="representative" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem" sortable>
@@ -152,7 +218,15 @@ const items = [
         </Column>
         <Column field="status" header="Status" sortable>
             <template #body="{ data }">
-                <Tag :value="data.status" />
+                <!-- <Tag :severity="statusLable(data.status)" :value="data.status" /> -->
+                <Tag type="button" @click="toggle($event, data, 'lable')" aria-haspopup="true" :severity="statusLable(data.status)" class="cursor-pointer" aria-controls="overlay_menu" :value="data.status" />
+                <Menu ref="lableMenu" id="overlay_menu" :model="lableItems" :popup="true">
+                    <template #item="{ item, label, props }">
+                        <div class="p-2">
+                            <Tag class="ml-2 cursor-pointer" :severity="statusLable(item.label)"  :value="item.label" />
+                        </div>
+                    </template>
+                </Menu>
             </template>
         </Column>
         <Column field="raw" header="Raw" style="width: 2%" sortable>
@@ -167,19 +241,19 @@ const items = [
         </Column>
         <Column field="created_at" header="Date Created" sortable>
             <template #body="{ data }">
-                {{ data.created_at }}
+                {{ moment(data.created_at).format('MM/DD/YYYY hh:mm a') }}
             </template>
         </Column>
         <Column field="action" header="Action" sortable>
             <template #body="{ data, rowIndex }">
-                <Button type="button" size="small" text icon="pi pi-ellipsis-v" @click="toggle($event, data)" aria-haspopup="true" aria-controls="overlay_menu" rounded outlined />
+                <Button type="button" size="small" text icon="pi pi-ellipsis-v" @click="toggle($event, data, 'action')" aria-haspopup="true" aria-controls="overlay_menu" rounded outlined />
                 <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
-                    <template #item="{ item, label, props }">
+                    <!-- <template #item="{ item, label, props }">
                         <div class="p-2">
                             <i :class="`${item.icon}`"></i>
                             <span class="ml-2">{{ item.label }}</span>
                         </div>
-                    </template>
+                    </template> -->
                 </Menu>
             </template>
         </Column>

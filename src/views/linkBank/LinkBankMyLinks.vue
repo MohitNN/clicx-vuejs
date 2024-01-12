@@ -1,10 +1,12 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed , inject} from 'vue';
 import LinkBankMyLinksTable from './LinkBankMyLinksTable.vue';
 import store from '@/store';
+import { useRouter } from 'vue-router';
 
-
+const router = useRouter();
 const activeTab = ref(0)
+
 const page = ref(1)
 const activeTabTitle = ref('All')
 const linkBankLinkList = computed(() => store.state.LinkbankStore.linkBankList);
@@ -12,9 +14,12 @@ const linkBankLinkList = computed(() => store.state.LinkbankStore.linkBankList);
 const changTabEvent = ((data) => {
     activeTabTitle.value = data.originalEvent.target.innerText;
 })
+const goToCreateLinkBank = (() => {
+    router.push({ name: 'LinkBankNewLink' })
+})
 const init = async () => {
     await store
-        .dispatch('LinkbankStore/getLinkBank',{page : page.value})
+        .dispatch('LinkbankStore/getLinkBank',{page : page.value , status : activeTabTitle.value})
         .then((response) => {})
         .catch((error) => {
             console.log(error);
@@ -29,7 +34,7 @@ onMounted(async () => {
     <h3>Link Bank Stats</h3>
     <div className="card flex justify-content-between align-items-center">
         <h5 class="mb-0">Link Banks List</h5>
-        <Button label="Add New Link" icon="pi pi-plus" outlined />
+        <Button label="Add New Link" @click="goToCreateLinkBank" icon="pi pi-plus" outlined />
     </div>
     <div className="card">
         <TabView @tab-change="changTabEvent" v-model:activeIndex="activeTab">

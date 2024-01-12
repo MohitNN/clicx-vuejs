@@ -15,11 +15,11 @@ const model = ref([
         items: [
             {
                 label: 'Link Bank',
-                icon: 'pi pi-fw pi-user',
+                icon: 'pi pi-fw pi-link',
                 items: [
                     {
                         label: 'Create New Link',
-                        icon: 'pi pi-fw pi-sign-in',
+                        icon: 'pi pi-fw pi-file-export',
                         to: '/link-bank/create-new-link-bank'
                     },
                     {
@@ -77,47 +77,47 @@ const model = ref([
         icon: 'pi pi-fw pi-briefcase',
         to: '/pages',
         items: [
-            {
-                label: 'Landing',
-                icon: 'pi pi-fw pi-globe',
-                to: '/landing'
-            },
-            {
-                label: 'Auth',
-                icon: 'pi pi-fw pi-user',
-                items: [
-                    {
-                        label: 'Login',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/login'
-                    },
-                    {
-                        label: 'Error',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/auth/error'
-                    },
-                    {
-                        label: 'Access Denied',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/auth/access'
-                    }
-                ]
-            },
-            {
-                label: 'Crud',
-                icon: 'pi pi-fw pi-pencil',
-                to: '/pages/crud'
-            },
-            {
-                label: 'Timeline',
-                icon: 'pi pi-fw pi-calendar',
-                to: '/pages/timeline'
-            },
-            {
-                label: 'Not Found',
-                icon: 'pi pi-fw pi-exclamation-circle',
-                to: '/pages/notfound'
-            },
+            // {
+            //     label: 'Landing',
+            //     icon: 'pi pi-fw pi-globe',
+            //     to: '/landing'
+            // },
+            // {
+            //     label: 'Auth',
+            //     icon: 'pi pi-fw pi-user',
+            //     items: [
+            //         {
+            //             label: 'Login',
+            //             icon: 'pi pi-fw pi-sign-in',
+            //             to: '/login'
+            //         },
+            //         {
+            //             label: 'Error',
+            //             icon: 'pi pi-fw pi-times-circle',
+            //             to: '/auth/error'
+            //         },
+            //         {
+            //             label: 'Access Denied',
+            //             icon: 'pi pi-fw pi-lock',
+            //             to: '/auth/access'
+            //         }
+            //     ]
+            // },
+            // {
+            //     label: 'Crud',
+            //     icon: 'pi pi-fw pi-pencil',
+            //     to: '/pages/crud'
+            // },
+            // {
+            //     label: 'Timeline',
+            //     icon: 'pi pi-fw pi-calendar',
+            //     to: '/pages/timeline'
+            // },
+            // {
+            //     label: 'Not Found',
+            //     icon: 'pi pi-fw pi-exclamation-circle',
+            //     to: '/pages/notfound'
+            // },
             {
                 label: 'Empty',
                 icon: 'pi pi-fw pi-circle-off',

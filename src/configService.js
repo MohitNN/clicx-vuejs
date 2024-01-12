@@ -194,27 +194,32 @@ const link_status = [
     {
         id : 1,
         status : 'Pending',
-        name : 'Pending'
+        name : 'Pending',
+        color : 'info',
     },
     {
         id : 2,
         status : 'Active',
-        name : 'Active'
+        name : 'Active',
+        color : 'primary',
     },
     {
         id : 3,
         status : 'Completed',
-        name : 'Completed'
+        name : 'Completed',
+        color : 'success',
     },
     {
         id : 4,
         status : 'Evergreen',
-        name : 'Evergreen'
+        name : 'Evergreen',
+        color : 'warning',
     },
     {
         id : 5,
         status : 'My Links',
-        name : 'My Links'
+        name : 'My Links',
+        color : 'danger',
     },
 ]
 
