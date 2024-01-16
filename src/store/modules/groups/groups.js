@@ -94,6 +94,15 @@ const actions = {
         }
         return resp;
     },
+
+    async checkSlugForUserDomain({ dispatch }, data) {
+        let resp = await axios.post('user/groups/check-slug-domain', data);
+        if (resp.data.status == true) {
+            
+        }
+        return resp;
+    },
+
     async deleteGroup({ dispatch }, data) {
         let resp = await axios.post('user/groups/delete-group', data);
         if (resp.data.status == true) {

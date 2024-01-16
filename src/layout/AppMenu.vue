@@ -5,12 +5,12 @@ import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
     {
-        label: 'Home',
+        // label: 'Home',
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
-        label: 'Link Bank',
-        icon: 'pi pi-fw pi-briefcase',
+        // label: 'Link Bank',
+        // icon: 'pi pi-fw pi-briefcase',
         to: '/pages',
         items: [
             {
@@ -20,7 +20,7 @@ const model = ref([
                     {
                         label: 'Create New Link',
                         icon: 'pi pi-fw pi-file-export',
-                        to: '/link-bank/create-new-link-bank'
+                        to: '/link-bank/create-new-link-bank',
                     },
                     {
                         label: 'Link Bank',
@@ -32,9 +32,16 @@ const model = ref([
         ]
     },
     {
-        label: 'Settings',
+        // label: 'Settings',
         items: [
-            { label: 'Manage Groups', icon: 'pi pi-cog', to: '/groups/manage-groups' , groupMenu : true },
+            { label: 'Manage Settings', icon: 'pi pi-cog', to: '/groups/manage-groups' , groupMenu : true },
+        ]
+    },
+
+    {
+        // label: 'Settings',
+        items: [
+            { label: 'Master Campaigns', icon: 'pi pi-chart-bar', to: '/campaigns/master-campaigns' },
         ]
     },
     // {
@@ -73,8 +80,8 @@ const model = ref([
     //     ]
     // },
     {
-        label: 'Pages',
-        icon: 'pi pi-fw pi-briefcase',
+        // label: 'Pages',
+        // icon: 'pi pi-fw pi-briefcase',
         to: '/pages',
         items: [
             // {
@@ -131,7 +138,7 @@ const model = ref([
 <template>
     <ul class="layout-menu">
         <template v-for="(item, i) in model" :key="item">
-            <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
+            <AppMenuItem v-if="!item.separator" :item="item" :index="i"></AppMenuItem>
             <li v-if="item.separator" class="menu-separator"></li>
         </template>
     </ul>

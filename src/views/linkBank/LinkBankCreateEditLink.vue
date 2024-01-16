@@ -1,12 +1,15 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required, helpers, url } from '@vuelidate/validators';
+import { required, helpers, url, alphaNum } from '@vuelidate/validators';
 import { useToast } from 'primevue/usetoast';
+import debounce from 'lodash.debounce';
 import store from '@/store';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import moment from 'moment';
 import { useRouter } from 'vue-router';
+
+const alphaNumWithHyphen = helpers.regex(/^[a-z0-9-]*$/i);
 
 const router = useRouter();
 
@@ -17,12 +20,17 @@ const props = defineProps({
         required: false
     }
 });
+
+const isErrorSlug = ref(false);
+const isSlugLoad = ref(false);
+const isErrorVisibleLink = ref(false);
+const isVisibleLink = ref(false);
 const statusList = ['Pending', 'Active', 'Completed', 'Evergreen', 'My Links'];
 const link_bank = ref({
     name: '',
     destination_link: '',
     status: 'Active',
-    is_domain_setting: 'system-domain',
+    is_domain_setting: 'user-domain',
     visible_link: '',
     additional_notes: '',
     domain_user_id: null,
@@ -37,7 +45,6 @@ const link_bank = ref({
 });
 
 const minDate = ref(new Date());
-
 
 const selectedStartDate = ref(null);
 const selectedEndDate = ref(null);
@@ -62,12 +69,23 @@ const linkBank_reset = () => {
     };
     link_vv.value.link_bank.$reset();
 };
+
+const mustBeUniquVisibleLink = (value) => {
+    if (!isErrorVisibleLink.value) {
+        return true;
+    }
+    return false;
+};
 const links_rules = {
     link_bank: {
         name: { required: helpers.withMessage('Link Name field is required', required) },
-        visible_link: { required: helpers.withMessage('Visible Link field is required', required) },
+        visible_link: { 
+            required: helpers.withMessage('Visible Link field is required', required), 
+            mustBeUniquVisibleLink: helpers.withMessage('This Visible link already has been taken', mustBeUniquVisibleLink),
+            alphaNumWithHyphen: helpers.withMessage('The field only allows letters, numbers, and hyphens.', alphaNumWithHyphen),
+        },
         destination_link: { required: helpers.withMessage('Destination Link field is required', required) },
-        domain_user_id: { required: helpers.withMessage('Visible Link field is required', required) },
+        domain_user_id: { required: helpers.withMessage('Domain field is required', required) },
         vendor_id: { required: helpers.withMessage('Vendor is required', required) },
         group_id: { required: helpers.withMessage('Group is required', required) }
     }
@@ -77,8 +95,9 @@ const text_area_name = ref();
 const user_domain = ref({
     domain_url: '',
     redirect_url: '',
+    slug: '',
     pixel_code: '',
-    cname_url: 'https://www.goseemyproject.com/super/franchise-settings'
+    cname_url: ''
 });
 const dialog = ref({
     name: '',
@@ -95,6 +114,13 @@ const rules = {
         name: { required: helpers.withMessage(rule.value.one, required) }
     }
 };
+const mustBeUniquSlug = (value) => {
+    if (!isErrorSlug.value) {
+        return true;
+    }
+    return false;
+};
+
 
 const rules1 = {
     user_domain: {
@@ -102,10 +128,16 @@ const rules1 = {
             required: helpers.withMessage('The Domain URL field is required', required),
             url: helpers.withMessage(`The Domain URL must be URL and URL must start with 'http://' or 'https:// `, url)
         },
-        redirect_url: {
-            required: helpers.withMessage('The Redirect URL field is required', required),
-            url: helpers.withMessage(`The Redirect URL must be URL and URL must start with 'http://' or 'https:// `, url)
+        slug: {
+            required: helpers.withMessage('The slug field is required', required),
+            alphaNum: helpers.withMessage('The slug field Only alpha numeric character are allowed', alphaNum),
+            mustBeUniquSlug: helpers.withMessage('This slug already has been taken', mustBeUniquSlug)
         }
+
+        // redirect_url: {
+        //     required: helpers.withMessage('The Redirect URL field is required', required),
+        //     url: helpers.withMessage(`The Redirect URL must be URL and URL must start with 'http://' or 'https:// `, url)
+        // }
     }
 };
 const vv1 = useVuelidate(rules1, { user_domain });
@@ -119,7 +151,7 @@ const getLinkPlatformList = ref([]);
 onMounted(async () => {
     init();
     if (props.id) {
-         await editLinkData();
+        await editLinkData();
     }
 });
 
@@ -168,12 +200,12 @@ const init = async () => {
 
 const editLinkData = async () => {
     let data = { link_bank_id: props.id };
-    store.dispatch('globleStore/setcounter')
+    store.dispatch('globleStore/setcounter');
     await store
         .dispatch('LinkbankStore/getSingleLinkBank', data)
         .then((response) => {
-            if(response.data.status) {
-                let resData = response.data.data
+            if (response.data.status) {
+                let resData = response.data.data;
                 link_bank.value = {
                     link_bank_id: resData.id ? resData.id : '',
                     name: resData.name ? resData.name : '',
@@ -192,11 +224,11 @@ const editLinkData = async () => {
                     end_date: resData.end_date ? moment(resData.end_date).format('MM/DD/YYYY hh:mm a') : null,
                     is_advance_option: resData.is_advance_option == 1 ? true : false
                 };
-                store.dispatch('globleStore/setcounter')
+                store.dispatch('globleStore/setcounter');
             }
         })
         .catch((error) => {
-            store.dispatch('globleStore/setcounter')
+            store.dispatch('globleStore/setcounter');
             console.log(error);
         });
 };
@@ -207,6 +239,8 @@ const modalOpen = (name, label, textareaname) => {
     ModelShow.value = true;
     rule.value.one = `The ${name} field is required`;
     text_area_name.value = textareaname;
+    isErrorSlug.value = false;
+    isSlugLoad.value = false;
 };
 const copyValue = (text) => {
     let listener = function (ev) {
@@ -254,8 +288,9 @@ const submitForm = () => {
             name: model_value.value.name,
             domain_url: user_domain.value.domain_url,
             redirect_url: user_domain.value.redirect_url,
+            slug: user_domain.value.slug,
             pixel_code: user_domain.value.pixel_code,
-            cname_url: 'https://www.goseemyproject.com/super/franchise-settings'
+            cname_url: user_domain.value.cname_url
         };
         store.dispatch('GroupStore/saveDomain', data).then((response) => {
             if (response.data.status) {
@@ -300,29 +335,79 @@ const saveLinkBank = () => {
     link_vv.value.link_bank.$touch();
     if (link_vv.value.link_bank.$invalid) return;
     let data = link_bank.value;
-    store.dispatch('globleStore/setcounter')
+    store.dispatch('globleStore/setcounter');
     store
         .dispatch('LinkbankStore/saveLinkBank', data)
         .then((response) => {
             if (response.data.status) {
-                store.dispatch('globleStore/setcounter')
+                store.dispatch('globleStore/setcounter');
                 toast.add({ severity: 'success', summary: 'Success Message', detail: 'Link Bank Successfully!', life: 3000 });
                 router.push({ name: 'LinkBankMyLinks' });
             } else {
-                store.dispatch('globleStore/setcounter')
+                store.dispatch('globleStore/setcounter');
                 toast.add({ severity: 'error', summary: 'Error Message', detail: 'Server Error!', life: 3000 });
             }
         })
         .catch((error) => {
-            store.dispatch('globleStore/setcounter')
+            store.dispatch('globleStore/setcounter');
         });
 };
+
+const checkSlugDebounced = debounce(async (event) => {
+    let slug = event.target.value;
+    let data = { slug: slug, user_domain_id: user_domain.value.user_domain_id };
+    isSlugLoad.value = true;
+    if (slug) {
+        await store
+            .dispatch('GroupStore/checkSlugForUserDomain', data)
+            .then((response) => {
+                if (response.data.status) {
+                    isSlugLoad.value = false;
+                    isErrorSlug.value = false;
+                    user_domain.value.cname_url = `${slug}.${import.meta.env.VITE_MAIN_DOMAIN}`;
+                } else {
+                    isSlugLoad.value = false;
+                    isErrorSlug.value = true;
+                    user_domain.value.cname_url = ``;
+                }
+            })
+            .catch((error) => {});
+    } else {
+        isSlugLoad.value = false;
+        user_domain.value.cname_url = ``;
+    }
+}, 500);
+
+const checkVisibleLink = debounce(async (event) => {
+    let visible_link = event.target.value;
+    let data = { visible_link: visible_link, link_bank_id: link_bank.value.link_bank_id };
+    isVisibleLink.value = true;
+    if (visible_link) {
+        await store
+            .dispatch('LinkbankStore/checkVisibleLink', data)
+            .then((response) => {
+                if (response.data.status) {
+                    isVisibleLink.value = false;
+                    isErrorVisibleLink.value = false;
+                } else {
+                    isVisibleLink.value = false;
+                    isErrorVisibleLink.value = true;
+                }
+            })
+            .catch((error) => {});
+    } else {
+        isVisibleLink.value = false;
+    }
+}, 500);
+
 const reset = () => {
     model_value.value.name = '';
     user_domain.value = {
         domain_url: '',
         redirect_url: '',
-        pixel_code: ''
+        slug: '',
+        pixel_code: '',
+        cname_url: ''
     };
 };
 </script>
@@ -334,15 +419,28 @@ const reset = () => {
             <small class="p-error" id="text-error" v-if="vv?.model_value.name?.$errors[0]">{{ rule.one }}</small>
         </div>
         <div class="field p-fluid" v-if="dialog.label == 'Add User Domain'">
+            <label for="user_domain_name">Slug</label>
+            <span class="p-input-icon-right">
+                <div class="p-inputgroup">
+                    <InputText v-lowercase v-model.trim="vv1.user_domain.slug.$model" @input="checkSlugDebounced($event)" :class="vv1?.user_domain.slug?.$errors[0] ? 'p-invalid' : ''" />
+                    <span v-if="isErrorSlug" class="p-inputgroup-addon text-red-500 bg-red-100"><i class="pi pi-times"></i></span>
+                    <span v-else class="p-inputgroup-addon text-green-500 bg-green-100"><i class="pi pi-check"></i></span>
+                    <span v-if="isSlugLoad" class="p-inputgroup-addon"><i class="pi pi-spin pi-spinner"></i></span>
+                </div>
+                <small class="" v-if="isSlugLoad" id="">checking...</small>
+                <small class="p-error" id="text-error">{{ vv1?.user_domain.slug?.$errors[0]?.$message || '&nbsp;' }}</small>
+            </span>
+        </div>
+        <div class="field p-fluid" v-if="dialog.label == 'Add User Domain'">
             <label for="user_domain_url">Domain URL</label>
             <InputText id="user_domain_url" v-model="vv1.user_domain.domain_url.$model" :class="vv1?.user_domain.domain_url?.$errors[0] ? 'p-invalid' : ''" type="text" />
             <small class="p-error" id="text-error">{{ vv1?.user_domain.domain_url?.$errors[0]?.$message || '&nbsp;' }}</small>
         </div>
-        <div class="field p-fluid" v-if="dialog.label == 'Add User Domain'">
+        <!-- <div class="field p-fluid" v-if="dialog.label == 'Add User Domain'">
             <label for="redirect_url">Redirect URL</label>
             <InputText id="redirect_url" v-model="vv1.user_domain.redirect_url.$model" :class="vv1?.user_domain.redirect_url?.$errors[0] ? 'p-invalid' : ''" type="text" />
             <small class="p-error" id="text-error">{{ vv1?.user_domain.redirect_url?.$errors[0]?.$message || '&nbsp;' }}</small>
-        </div>
+        </div> -->
         <div class="field p-fluid" v-if="dialog.label == 'Add User Domain' || dialog.label == 'Add Retargeting Pixel'">
             <label for="user_domain_pixel_code">{{ text_area_name }}</label>
             <Textarea id="user_domain_pixel_code" v-model="user_domain.pixel_code" rows="5" />
@@ -417,7 +515,7 @@ const reset = () => {
                                 :class="link_vv?.link_bank.group_id?.$errors[0] ? 'p-invalid' : ''"
                                 id="link_status"
                                 size="small"
-                                placeholder="Select Status"
+                                placeholder="Select Group"
                             ></Dropdown>
                             <Button icon="pi pi-plus" @click="modalOpen('Group Name', 'Add Group')" />
                         </div>
@@ -451,7 +549,7 @@ const reset = () => {
                                 optionValue="id"
                                 optionLabel="name"
                                 size="small"
-                                placeholder="Select System Domain"
+                                placeholder="Select User Domain"
                             ></Dropdown>
                             <Button v-if="link_bank.is_domain_setting == 'user-domain'" icon="pi pi-plus" @click="modalOpen('User Domain Name', 'Add User Domain', 'Pixel Code')" />
                         </div>
@@ -461,7 +559,8 @@ const reset = () => {
                 <div class="field grid p-fluid mt-5">
                     <label class="col-4" for="link_name">Visible Link</label>
                     <div class="col-8">
-                        <InputText id="link_name" v-model="link_vv.link_bank.visible_link.$model" size="small" :class="link_vv?.link_bank.visible_link?.$errors[0] ? 'p-invalid' : ''" class="" type="text" />
+                        <InputText v-lowercase id="link_name" v-model="link_vv.link_bank.visible_link.$model" @input="checkVisibleLink($event)" size="small" :class="link_vv?.link_bank.visible_link?.$errors[0] ? 'p-invalid' : ''" class="" type="text" />
+                        <small class="" v-if="isVisibleLink" id="">checking...</small>
                         <small class="p-error" v-if="link_vv?.link_bank.visible_link?.$errors[0]" id="text-error">{{ link_vv?.link_bank.visible_link?.$errors[0]?.$message || '&nbsp;' }}</small>
                     </div>
                 </div>
@@ -485,7 +584,7 @@ const reset = () => {
                 <div class="field grid p-fluid mt-5">
                     <label class="col-4" for="link_status">Retargeting Pixel</label>
                     <div class="col-8 p-inputgroup flex-1">
-                        <Dropdown :options="getRetargetingPixel" optionValue="id" optionLabel="name" v-model="link_bank.retargeting_pixel_id" id="link_status" size="small" placeholder="Select System Domain"></Dropdown>
+                        <Dropdown :options="getRetargetingPixel" optionValue="id" optionLabel="name" v-model="link_bank.retargeting_pixel_id" id="link_status" size="small" placeholder="Select Retargeting Pixel"></Dropdown>
                         <Button icon="pi pi-plus" @click="modalOpen('Retargeting Pixel Name', 'Add Retargeting Pixel', 'Retargeting Pixel Code')" />
                     </div>
                 </div>
@@ -493,13 +592,13 @@ const reset = () => {
                     <div class="col-12 flex align-items-center">
                         <div class="col-4 pl-0">Start Date</div>
                         <div class="col-8 pl-2 pr-0">
-                            <Calendar id="calendar-12h" v-model="link_bank.start_date"  showButtonBar showTime hourFormat="12" />
+                            <Calendar id="calendar-12h" v-model="link_bank.start_date" showButtonBar showTime hourFormat="12" />
                         </div>
                     </div>
                     <div class="col-12 mt-5 flex align-items-center">
                         <div class="col-4 pl-0">End Date</div>
                         <div class="col-8 pl-2 pr-0">
-                            <Calendar id="calendar-12h"  v-model="link_bank.end_date"  showButtonBar showTime hourFormat="12" />
+                            <Calendar id="calendar-12h" v-model="link_bank.end_date" showButtonBar showTime hourFormat="12" />
                         </div>
                     </div>
                 </div>
@@ -514,7 +613,7 @@ const reset = () => {
                 <div class="field grid p-fluid mt-5">
                     <label class="col-4" for="link_status">Choose Platform</label>
                     <div class="col-8 p-inputgroup flex-1">
-                        <Dropdown optionValue="id" optionLabel="name" :options="getLinkPlatformList" v-model="link_bank.link_platform_id" id="link_status" size="small" placeholder="Select System Domain"></Dropdown>
+                        <Dropdown optionValue="id" optionLabel="name" :options="getLinkPlatformList" v-model="link_bank.link_platform_id" id="link_status" size="small" placeholder="Select Platform"></Dropdown>
                         <Button icon="pi pi-plus" @click="modalOpen('Link Platform Name', 'Add Link Platform')" />
                     </div>
                 </div>

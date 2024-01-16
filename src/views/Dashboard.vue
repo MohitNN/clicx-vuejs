@@ -197,12 +197,12 @@ watch(
     <div class="grid flex-column">
         <div>
             <div class=" xl:flex">
-                <div class="col-12 xl:col-6">
+                <div class="col-12 xl:col-12">
                     <div class="card">
                         <LeadMapChart />
                     </div>
                 </div>
-                <div class="xl:col-6 col-12">
+                <!-- <div class="xl:col-6 col-12">
                     <div class="">
                         <div class="flex flex-wrap h-fit card justify-content-between">
                             <div v-for="(item, index) in 3" :key="index" class=" col-6">
@@ -245,7 +245,7 @@ watch(
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="w-full">
                 <div class="md:flex flex-wrap">
@@ -356,27 +356,27 @@ watch(
     height: 240px !important;
     width: 235px !important;
 }
-.p-datatable{
+.table-dashboard{
     height: 215px !important;
     overflow-y: scroll !important;
 }
-.p-datatable-table{
+.table-dashboard .p-datatable-table{
     min-width: 0px !important;
 }
-.p-column-title{
+.table-dashboard .p-datatable-table .p-column-title{
     font-size: 10px !important;
 }
-td{
+.table-dashboard .p-datatable-table td{
     font-size: 10px !important;
 }
-.p-datatable .p-datatable-tbody > tr > td{
+.table-dashboard .p-datatable-tbody > tr > td{
     padding: 0.5rem 1rem !important;
 }
-.p-datatable .p-datatable-thead > tr > th{
+.table-dashboard .p-datatable-thead > tr > th{
     padding: 0.5rem 1rem !important;
 }
 
-thead{
+.table-dashboard .p-datatable-table thead{
     position: sticky !important;
     top: 0 !important;
 }

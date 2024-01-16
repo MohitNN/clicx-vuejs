@@ -1,8 +1,8 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
 import { computed } from 'vue';
-import logoFileDark from "@/assets/images/logo-dark.svg";
-import logoFileWhite from "@/assets/images/logo-white.svg";
+import logoFileDark from "@/assets/images/clickx.png";
+import logoFileWhite from "@/assets/images/clickx.png";
 
 const { layoutConfig } = useLayout();
 

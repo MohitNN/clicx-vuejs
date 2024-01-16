@@ -246,7 +246,7 @@ const items = [
         </Column>
         <Column field="action" header="Action" sortable>
             <template #body="{ data, rowIndex }">
-                <Button type="button" size="small" text icon="pi pi-ellipsis-v" @click="toggle($event, data, 'action')" aria-haspopup="true" aria-controls="overlay_menu" rounded outlined />
+                <Button type="button" size="small" text icon="pi pi-cog" @click="toggle($event, data, 'action')" aria-haspopup="true" aria-controls="overlay_menu" rounded outlined />
                 <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
                     <!-- <template #item="{ item, label, props }">
                         <div class="p-2">

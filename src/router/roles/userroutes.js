@@ -84,6 +84,14 @@ export default [
         meta: {
             requiredAuth: true
         },
-    }
+    },
+    {
+        path: '/campaigns/master-campaigns',
+        name: 'MasterCampaignIndex',
+        component: () => import('@/views/MasterCampaign/masterCampaignIndex.vue'),
+        meta: {
+            requiredAuth: true
+        },
+    },
 
 ]

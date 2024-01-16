@@ -46,7 +46,15 @@ const actions = {
             dispatch('getLinkBank' , data);
         }
         return resp;
-    }
+    },
+
+    async checkVisibleLink({ dispatch }, data) {
+        let resp = await axios.post('user/link-bank/check-visible-link', data);
+        if (resp.data.status == true) {
+            
+        }
+        return resp;
+    },
 
 };
 export default {

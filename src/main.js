@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import VueElementLoading from "vue-element-loading";
+import VueElementLoading from 'vue-element-loading';
 import moment from 'moment';
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
@@ -107,18 +107,18 @@ import BlockViewer from '@/components/BlockViewer.vue';
 
 import '@/assets/styles.scss';
 
-import Toastification from "vue-toastification";
-import "vue-toastification/dist/index.css";
+import Toastification from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
 const app = createApp(App);
 const tostOptions = {
-    transition: "Vue-Toastification__bounce",
+    transition: 'Vue-Toastification__bounce',
     maxToasts: 20,
     newestOnTop: true
 };
 
 app.use(router);
-app.provide("moment", moment);
+app.provide('moment', moment);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
@@ -224,3 +224,12 @@ app.component('TriStateCheckbox', TriStateCheckbox);
 app.component('VirtualScroller', VirtualScroller);
 
 app.mount('#app');
+app.directive('lowercase', {
+    created(el, binding, vnode, prevVnode) {
+        el.addEventListener('input', (e) => {
+            e.target.value = e.target.value.toLowerCase()
+        })
+    },
+});
+app.config.globalProperties.siteMainDomainName = 'clicxtrack.io';
+
