@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, helpers, url, alphaNum } from '@vuelidate/validators';
 import { useToast } from 'primevue/usetoast';
@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 import store from '@/store';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import { useRouter } from 'vue-router';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 
 const alphaNumWithHyphen = helpers.regex(/^[a-z0-9-]*$/i);
 
@@ -19,6 +19,17 @@ const props = defineProps({
         default: null,
         required: false
     }
+});
+
+onBeforeRouteLeave((to, from, next) => {
+    if (from.name == 'LinkBankEditLink') {
+        if (to.name == 'LinkBankNewLink') {
+            linkBank_reset();
+            next();
+        }
+        next();
+    }
+    next();
 });
 
 const isErrorSlug = ref(false);
@@ -54,7 +65,7 @@ const linkBank_reset = () => {
         name: '',
         destination_link: '',
         status: 'Active',
-        is_domain_setting: 'system-domain',
+        is_domain_setting: 'user-domain',
         visible_link: '',
         additional_notes: '',
         domain_user_id: null,
@@ -79,10 +90,10 @@ const mustBeUniquVisibleLink = (value) => {
 const links_rules = {
     link_bank: {
         name: { required: helpers.withMessage('Link Name field is required', required) },
-        visible_link: { 
-            required: helpers.withMessage('Visible Link field is required', required), 
+        visible_link: {
+            required: helpers.withMessage('Visible Link field is required', required),
             mustBeUniquVisibleLink: helpers.withMessage('This Visible link already has been taken', mustBeUniquVisibleLink),
-            alphaNumWithHyphen: helpers.withMessage('The field only allows letters, numbers, and hyphens.', alphaNumWithHyphen),
+            alphaNumWithHyphen: helpers.withMessage('The field only allows letters, numbers, and hyphens.', alphaNumWithHyphen)
         },
         destination_link: { required: helpers.withMessage('Destination Link field is required', required) },
         domain_user_id: { required: helpers.withMessage('Domain field is required', required) },
@@ -121,7 +132,6 @@ const mustBeUniquSlug = (value) => {
     return false;
 };
 
-
 const rules1 = {
     user_domain: {
         domain_url: {
@@ -140,6 +150,8 @@ const rules1 = {
         // }
     }
 };
+const userDomainList = computed(() => store.state.GroupStore.userDomainList);
+
 const vv1 = useVuelidate(rules1, { user_domain });
 const vv = useVuelidate(rules, { model_value });
 const link_vv = useVuelidate(links_rules, { link_bank });
@@ -149,10 +161,10 @@ const getDomain = ref([]);
 const getRetargetingPixel = ref([]);
 const getLinkPlatformList = ref([]);
 onMounted(async () => {
-    init();
     if (props.id) {
         await editLinkData();
     }
+    await init();
 });
 
 const init = async () => {
@@ -211,7 +223,7 @@ const editLinkData = async () => {
                     name: resData.name ? resData.name : '',
                     destination_link: resData.destination_link ? resData.destination_link : '',
                     status: resData.status ? resData.status : 'Active',
-                    is_domain_setting: resData.is_domain_setting ? resData.is_domain_setting : 'system-domain',
+                    is_domain_setting: resData.is_domain_setting ? resData.is_domain_setting : 'user-domain',
                     visible_link: resData.visible_link ? resData.visible_link : '',
                     additional_notes: resData.additional_notes ? resData.additional_notes : '',
                     domain_user_id: resData.domain_user_id ? resData.domain_user_id : '',
@@ -410,6 +422,15 @@ const reset = () => {
         cname_url: ''
     };
 };
+
+const getDomainURL = (domain_id) => {
+    let domain = getDomain.value.find((val) => val.id == domain_id)
+    if(domain) {
+        return domain.domain_url
+    }
+    return ''
+    
+};
 </script>
 <template>
     <Dialog @hide="vv.$reset(), vv1.$reset(), reset()" v-model:visible="ModelShow" modal :draggable="false" :header="dialog.label" :style="{ width: '30vw' }">
@@ -462,7 +483,8 @@ const reset = () => {
     <div class="grid">
         <div class="col-12 lg:col-6 xl:col-6">
             <div className="card">
-                <h5>Create New Link</h5>
+                <h5 v-if="$route.name == 'LinkBankNewLink'">Create New Link</h5>
+                <h5 v-if="$route.name == 'LinkBankEditLink'">Edit Link</h5>
                 <Divider />
                 <div class="field grid p-fluid">
                     <label class="col-4" for="link_name">Link Name</label>
@@ -559,9 +581,19 @@ const reset = () => {
                 <div class="field grid p-fluid mt-5">
                     <label class="col-4" for="link_name">Visible Link</label>
                     <div class="col-8">
-                        <InputText v-lowercase id="link_name" v-model="link_vv.link_bank.visible_link.$model" @input="checkVisibleLink($event)" size="small" :class="link_vv?.link_bank.visible_link?.$errors[0] ? 'p-invalid' : ''" class="" type="text" />
+                        <InputText
+                            v-lowercase
+                            id="link_name"
+                            v-model="link_vv.link_bank.visible_link.$model"
+                            @input="checkVisibleLink($event)"
+                            size="small"
+                            :class="link_vv?.link_bank.visible_link?.$errors[0] ? 'p-invalid' : ''"
+                            class=""
+                            type="text"
+                        />
                         <small class="" v-if="isVisibleLink" id="">checking...</small>
                         <small class="p-error" v-if="link_vv?.link_bank.visible_link?.$errors[0]" id="text-error">{{ link_vv?.link_bank.visible_link?.$errors[0]?.$message || '&nbsp;' }}</small>
+                        <div class="text-blue-600 mt-1" v-if="link_bank.domain_user_id && link_bank.visible_link" >{{ getDomainURL(link_bank.domain_user_id) + link_bank.visible_link }}</div>
                     </div>
                 </div>
                 <div class="field grid align-items-center p-fluid mt-5">

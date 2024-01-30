@@ -2,7 +2,8 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import ProductService from '@/service/ProductService';
 import { useLayout } from '@/layout/composables/layout';
-import LeadMapChart from '@/components/LeadMapChart.vue';
+// import LeadMapChart from '@/components/LeadMapChart.vue';
+import LeadMapChartV4 from '@/components/LeadMapChartV4.vue';
 
 
 const { isDarkTheme, layoutConfig } = useLayout();
@@ -199,53 +200,10 @@ watch(
             <div class=" xl:flex">
                 <div class="col-12 xl:col-12">
                     <div class="card">
-                        <LeadMapChart />
+                        <LeadMapChartV4 />
                     </div>
                 </div>
-                <!-- <div class="xl:col-6 col-12">
-                    <div class="">
-                        <div class="flex flex-wrap h-fit card justify-content-between">
-                            <div v-for="(item, index) in 3" :key="index" class=" col-6">
-                                <label for="">Title</label>
-                                <div class="flex">
-                                    <div class="col-11 p-0">
-                                        <ProgressBar :value="50"></ProgressBar>
-                                    </div>
-                                    <div class="col-1 p-0">
-                                        <div class="ml-2">8</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-for="(item, index) in 3" :key="index" class=" col-6">
-                                <label for="">Title</label>
-                                <div class="flex">
-                                    <div class="col-11 p-0">
-                                        <ProgressBar :value="50"></ProgressBar>
-                                    </div>
-                                    <div class="col-1 p-0">
-                                        <div class="ml-2">8</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="xl:flex xl:pt-0 pt-4">
-                            <div class="col-12 xl:col-6 xl:pt-4 xl:pr-3 xl:pl-0 pl-0 pr-0">
-                                <div class="card flex flex-column align-items-center">
-                                    <h5 class="text-left w-full">Pie Chart</h5>
-                                    <Chart type="pie" :data="pieData" :options="pieOptions"></Chart>
-                                </div>
-                            </div>
-                            <div class="col-12 xl:col-6 xl:pr-0 pl-0 pr-0 xl:pl-3 xl:pt-4">
-                                <div class="card flex flex-column align-items-center">
-                                    <h5 class="text-left w-full">Doughnut Chart</h5>
-                                    <Chart type="doughnut" :data="pieData" :options="pieOptions"></Chart>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+                  <!-- this commented code in backup-files/dashboard.txt  -->
             </div>
             <div class="w-full">
                 <div class="md:flex flex-wrap">

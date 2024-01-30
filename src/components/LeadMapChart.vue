@@ -183,6 +183,5 @@ onMounted(() => {
 #chartdiv {
     width: 100%;
     height: 500px;
-    
 }
 </style>

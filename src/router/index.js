@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory , createWebHashHistory  } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
-import superadminroutes from './roles/superadminroutes';
-import adminroutes from './roles/adminroutes';
-import userroutes from './roles/userroutes';
+import superAdminRoutes from './roles/superadminroutes';
+import adminRoutes from './roles/adminroutes';
+import userRoutes from './roles/userroutes';
 import store from '@/store'
 
 const routes = [
@@ -18,9 +18,9 @@ const routes = [
                     requiredAuth: true
                 }
             },
-            ...userroutes,
-            // ...adminroutes,
-            // ...superadminroutes,
+            ...userRoutes,
+            ...adminRoutes,
+            // ...superAdminRoutes,
             {
                 path: '/pages/empty',
                 name: 'empty',
@@ -32,6 +32,22 @@ const routes = [
         path: '/login',
         name: 'login',
         component: () => import('@/views/pages/auth/Login.vue'),
+        meta: {
+            requiredAuth: false
+        }
+    },
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: () => import('@/views/pages/auth/ForgotPassword.vue'),
+        meta: {
+            requiredAuth: false
+        }
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: () => import('@/views/pages/auth/Register.vue'),
         meta: {
             requiredAuth: false
         }
@@ -53,7 +69,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory (),
     base: '/',
     routes,
 });

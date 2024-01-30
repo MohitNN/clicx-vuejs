@@ -5,6 +5,8 @@ import auth from "@/store/modules/auth";
 import GroupStore from "@/store/modules/groups/groups";
 import MasterCampaignStore from "@/store/modules/groups/masterCampaign";
 import LinkbankStore from "@/store/modules/linkbank";
+import AdminUserStore from "@/store/modules/admin/userStore";
+
 let stores = "";
 stores = {
     globleStore,
@@ -12,6 +14,7 @@ stores = {
     GroupStore,
     LinkbankStore,
     MasterCampaignStore,
+    AdminUserStore,
 }
 const vuexLocal = new VuexPersistence({
     modules: ['auth','globleStore']

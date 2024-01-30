@@ -7,44 +7,26 @@ import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, helpers } from '@vuelidate/validators';
-import logoFileDark from "@/assets/images/clickx.png";
+import logoFileDark from '@/assets/images/clickx.png';
 
 const { layoutConfig } = useLayout();
-const email_ = ref('');
-const password = ref('');
 const toast = useToast();
 const router = useRouter();
-
-const rules = {
-    email_: { required: helpers.withMessage('The Email field is required', required), email: helpers.withMessage('Please enter a valid email', email) },
-    password: { required: helpers.withMessage('The Password field is required', required) }
-};
-const vv = useVuelidate(rules, { email_, password });
+const email_ = ref('');
 
 const logoUrl = computed(() => {
     // return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
     return logoFileDark;
 });
 
-const loginSubmit = () => {
-    vv.value.$touch();
-    if (vv.value.$invalid) return;
-    let data = { email: email_.value, password: password.value };
-    store.dispatch('globleStore/setcounter');
-    store
-        .dispatch('auth/login', data)
-        .then((response) => {
-            if (response.data.status) {
-                store.dispatch('globleStore/setcounter');
-                router.push({ path: '/' });
-                toast.add({ severity: 'success', summary: 'Success Message', detail: 'Login Successfully!', life: 3000 });
-            }
-        })
-        .catch((error) => {
-            store.dispatch('globleStore/setcounter');
-            toast.add({ severity: 'error', summary: 'Error Message', detail: error.response.data.message, life: 3000 });
-        });
+const rules = {
+    email_: { required: helpers.withMessage('The Email field is required', required), email: helpers.withMessage('Please enter a valid email', email) },
 };
+const vv = useVuelidate(rules, { email_ });
+
+const forgotSubmit = () => {
+    alert(1)
+}
 </script>
 <template>
     <div class="flex align-items-center justify-content-center loginPage">
@@ -59,7 +41,7 @@ const loginSubmit = () => {
                         </div>
 
                         <div>
-                            <form @submit.prevent="loginSubmit">
+                            <form @submit.prevent="forgotSubmit()">
                                 <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
                                 <InputText
                                     id="email1"
@@ -72,28 +54,12 @@ const loginSubmit = () => {
                                     aria-describedby="email-help"
                                 />
                                 <p class="p-error" id="text-error">{{ vv?.email_?.$errors[0]?.$message || '&nbsp;' }}</p>
-
-                                <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-
-                                <Password
-                                    id="password1"
-                                    :feedback="false"
-                                    :class="vv?.password?.$errors[0] ? 'p-invalid' : ''"
-                                    v-model="vv.password.$model"
-                                    placeholder="Password"
-                                    :toggleMask="true"
-                                    class="w-full mb-2"
-                                    inputClass="w-full"
-                                    :inputStyle="{ padding: '1rem' }"
-                                    aria-describedby="password-help"
-                                ></Password>
-                                <p class="p-error" id="text-error">{{ vv?.password?.$errors[0]?.$message || '&nbsp;' }}</p>
                                 <div class="flex align-items-center justify-content-between mb-5 gap-5">
-                                    
-                                    <router-link to="register" class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Create an account!</router-link>
-                                    <router-link to="forgot-password" class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</router-link>
+                                    <div class="flex align-items-center">
+                                    </div>
+                                    <router-link :to="{ path: '/login' }" class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Back to Login?</router-link>
                                 </div>
-                                <Button label="Sign In" type="submit" class="w-full p-3 text-xl"></Button>
+                                <Button label="Forgot Password" type="submit" class="w-full p-3 text-xl"></Button>
                             </form>
                         </div>
                     </div>

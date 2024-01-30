@@ -1,17 +1,54 @@
 <script setup>
-import { ref } from 'vue';
+import { ref , computed} from 'vue';
 
 import AppMenuItem from './AppMenuItem.vue';
+import store from '@/store';
+const userInfo = computed(() => store.state.auth.user);
+const is_admin_menu = 'admin';
+const is_all_menu = 'all';
+// const is_user_menu = 'user';
+// const is_free_user_menu = 'free_user';
+// const is_pro_user_menu = 'pro_user';
 
 const model = ref([
     {
-        // label: 'Home',
+        is_menu: is_all_menu,
+        label: '',
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
-        // label: 'Link Bank',
-        // icon: 'pi pi-fw pi-briefcase',
-        to: '/pages',
+        ...(userInfo.value.role == "admin") 
+        ? 
+        {
+            is_menu: is_admin_menu,
+            items: [
+                {
+                    label: 'Users',
+                    icon: 'pi pi-fw pi-user',
+                    items: [
+                        {
+                            label: 'Create New User',
+                            icon: 'pi pi-fw pi-user-plus',
+                            to: '/users/create-new-user',
+                        },
+                        {
+                            label: 'User List',
+                            icon: 'pi pi-fw pi-user',
+                            to: '/users/manage-users',
+                        }
+                    ]
+                }
+            ]
+        } 
+        : 
+        {
+
+        }
+    },
+    {
+        to: '/link-bank',
+        is_menu: is_all_menu,
+        groupMenu: true,
         items: [
             {
                 label: 'Link Bank',
@@ -25,106 +62,25 @@ const model = ref([
                     {
                         label: 'Link Bank',
                         icon: 'pi pi-fw pi-database ',
-                        to: '/link-bank/my-links'
-                    },
+                        to: '/link-bank/my-links',
+                    }
                 ]
-            },
+            }
         ]
     },
     {
-        // label: 'Settings',
-        items: [
-            { label: 'Manage Settings', icon: 'pi pi-cog', to: '/groups/manage-groups' , groupMenu : true },
-        ]
+        is_menu: is_all_menu,
+        items: [{ label: 'Manage Settings', icon: 'pi pi-cog', to: '/groups/manage-groups', groupMenu: true }]
     },
 
     {
-        // label: 'Settings',
-        items: [
-            { label: 'Master Campaigns', icon: 'pi pi-chart-bar', to: '/campaigns/master-campaigns' },
-        ]
+        is_menu: is_all_menu,
+        items: [{ label: 'Master Campaigns', icon: 'pi pi-chart-bar', to: '/campaigns/master-campaigns' }]
     },
-    // {
-    //     label: 'UI Components',
-    //     items: [
-    //         { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
-    //         { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
-    //         { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', to: '/uikit/floatlabel' },
-    //         { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', to: '/uikit/invalidstate' },
-    //         { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
-    //         { label: 'Table', icon: 'pi pi-fw pi-table', to: '/uikit/table' },
-    //         { label: 'List', icon: 'pi pi-fw pi-list', to: '/uikit/list' },
-    //         { label: 'Tree', icon: 'pi pi-fw pi-share-alt', to: '/uikit/tree' },
-    //         { label: 'Panel', icon: 'pi pi-fw pi-tablet', to: '/uikit/panel' },
-    //         { label: 'Overlay', icon: 'pi pi-fw pi-clone', to: '/uikit/overlay' },
-    //         { label: 'Media', icon: 'pi pi-fw pi-image', to: '/uikit/media' },
-    //         { label: 'Menu', icon: 'pi pi-fw pi-bars', to: '/uikit/menu', preventExact: true },
-    //         { label: 'Message', icon: 'pi pi-fw pi-comment', to: '/uikit/message' },
-    //         { label: 'File', icon: 'pi pi-fw pi-file', to: '/uikit/file' },
-    //         { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', to: '/uikit/charts' },
-    //         { label: 'Misc', icon: 'pi pi-fw pi-circle', to: '/uikit/misc' }
-    //     ]
-    // },
-    // {
-    //     label: 'Prime Blocks',
-    //     items: [
-    //         { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', to: '/blocks', badge: 'NEW' },
-    //         { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: 'https://www.primefaces.org/primeblocks-vue', target: '_blank' }
-    //     ]
-    // },
-    // {
-    //     label: 'Utilities',
-    //     items: [
-    //         { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', to: '/utilities/icons' },
-    //         { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: 'https://www.primefaces.org/primeflex/', target: '_blank' }
-    //     ]
-    // },
     {
-        // label: 'Pages',
-        // icon: 'pi pi-fw pi-briefcase',
+        is_menu: is_all_menu,
         to: '/pages',
         items: [
-            // {
-            //     label: 'Landing',
-            //     icon: 'pi pi-fw pi-globe',
-            //     to: '/landing'
-            // },
-            // {
-            //     label: 'Auth',
-            //     icon: 'pi pi-fw pi-user',
-            //     items: [
-            //         {
-            //             label: 'Login',
-            //             icon: 'pi pi-fw pi-sign-in',
-            //             to: '/login'
-            //         },
-            //         {
-            //             label: 'Error',
-            //             icon: 'pi pi-fw pi-times-circle',
-            //             to: '/auth/error'
-            //         },
-            //         {
-            //             label: 'Access Denied',
-            //             icon: 'pi pi-fw pi-lock',
-            //             to: '/auth/access'
-            //         }
-            //     ]
-            // },
-            // {
-            //     label: 'Crud',
-            //     icon: 'pi pi-fw pi-pencil',
-            //     to: '/pages/crud'
-            // },
-            // {
-            //     label: 'Timeline',
-            //     icon: 'pi pi-fw pi-calendar',
-            //     to: '/pages/timeline'
-            // },
-            // {
-            //     label: 'Not Found',
-            //     icon: 'pi pi-fw pi-exclamation-circle',
-            //     to: '/pages/notfound'
-            // },
             {
                 label: 'Empty',
                 icon: 'pi pi-fw pi-circle-off',
@@ -132,6 +88,7 @@ const model = ref([
             }
         ]
     },
+    
 ]);
 </script>
 
@@ -144,6 +101,4 @@ const model = ref([
     </ul>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

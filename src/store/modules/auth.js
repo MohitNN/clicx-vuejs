@@ -36,6 +36,14 @@ const actions = {
         return resp;
     },
 
+    async register({ dispatch }, data) {
+        let resp = await axios.post('/register',data);
+        if (resp.data.status == true) {
+            // dispatch('getLinkBank' , data);
+        }
+        return resp;
+    },
+
     async logout({ commit }){
         let resp = await axios.get('/user/logout')
           commit('SET_USER','')

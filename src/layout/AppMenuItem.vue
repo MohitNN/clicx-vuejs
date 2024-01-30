@@ -2,9 +2,7 @@
 import { ref, onBeforeMount, watch, computed  } from 'vue';
 import { useRoute } from 'vue-router';
 import { useLayout } from '@/layout/composables/layout';
-
 const route = useRoute();
-
 const { layoutConfig, layoutState, setActiveMenuItem, onMenuToggle } = useLayout();
 
 const props = defineProps({
@@ -83,7 +81,8 @@ const isActiveGroup = computed(() => {
             <span class="layout-menuitem-text">{{ item.label }}</span>
             <i class="pi pi-fw pi-angle-down layout-submenu-toggler" v-if="item.items"></i>
         </a>
-        <div v-if="item.groupMenu">
+        
+        <div v-if="item?.groupMenu">
             <router-link v-if="item.to && !item.items && item.visible !== false" @click="itemClick($event, item, index)" :class="[item.class, { 'active-route': checkActiveRoute(item) || isActiveGroup }]" tabindex="0" :to="item.to">
                 <i :class="item.icon" class="layout-menuitem-icon"></i>
                 <span class="layout-menuitem-text">{{ item.label }}</span>
