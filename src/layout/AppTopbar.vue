@@ -11,6 +11,7 @@ import store from '@/store'
 import { useToast } from "primevue/usetoast";
 const confirm = useConfirm();
 const toast = useToast();
+const userInfo = computed(() => store.state.auth.user);
 
 const { layoutConfig, onMenuToggle , changeThemeSettings } = useLayout();
 const outsideClickListener = ref(null);

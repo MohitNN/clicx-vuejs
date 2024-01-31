@@ -108,6 +108,7 @@ import BlockViewer from '@/components/BlockViewer.vue';
 import '@/assets/styles.scss';
 
 import Toastification from 'vue-toastification';
+import globalMixin from './mixins/globalMixin';
 import 'vue-toastification/dist/index.css';
 
 const app = createApp(App);
@@ -222,7 +223,7 @@ app.component('TreeSelect', TreeSelect);
 app.component('TreeTable', TreeTable);
 app.component('TriStateCheckbox', TriStateCheckbox);
 app.component('VirtualScroller', VirtualScroller);
-
+app.mixin(globalMixin)
 app.mount('#app');
 app.directive('lowercase', {
     created(el, binding, vnode, prevVnode) {

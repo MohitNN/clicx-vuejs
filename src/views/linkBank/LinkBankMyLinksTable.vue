@@ -5,6 +5,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import config from '@/configService.js';
+import globalMixin from '@/mixins/globalMixin';
 import store from '@/store';
 const router = useRouter();
 const moment = inject('moment');
@@ -157,6 +158,8 @@ const items = [
         action_type: 'copy-link',
         icon: 'pi pi-copy',
         command: () => {
+            let url = selected_link_bank.value.domain?.domain_url + selected_link_bank.value.visible_link
+            globalMixin.methods.copyValue(url);
             toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
         }
     },
