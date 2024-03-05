@@ -50,7 +50,7 @@ const statusLable = (statusLable) => {
 };
 
 const changeLabel = (status) => {
-    let data = { link_bank_id: selected_link_bank_id.value, status: status , page : page.value };
+    let data = { link_bank_id: selected_link_bank_id.value, status: status, page: page.value };
     store
         .dispatch('LinkbankStore/changeStatus', data)
         .then((response) => {
@@ -70,35 +70,41 @@ const linkAction = (link_bank_id, link_action_type) => {
     alert(link_bank_id, link_action_type);
 };
 
+const CopiedURL = (data) => {
+    let url = data.domain?.domain_url + data.visible_link;
+    globalMixin.methods.copyValue(url);
+    toast.add({ severity: 'success', summary: 'Updated', detail: 'URL Copied', life: 3000 });
+};
+
 const lableItems = [
     {
         label: 'Pending',
         command: () => {
-            changeLabel('Pending')
+            changeLabel('Pending');
         }
     },
     {
         label: 'Active',
         command: () => {
-            changeLabel('Active')
+            changeLabel('Active');
         }
     },
     {
         label: 'Completed',
         command: () => {
-            changeLabel('Completed')
+            changeLabel('Completed');
         }
     },
     {
         label: 'Evergreen',
         command: () => {
-            changeLabel('Evergreen')
+            changeLabel('Evergreen');
         }
     },
     {
         label: 'My Links',
         command: () => {
-            changeLabel('My Links')
+            changeLabel('My Links');
         }
     }
 ];
@@ -158,9 +164,9 @@ const items = [
         action_type: 'copy-link',
         icon: 'pi pi-copy',
         command: () => {
-            let url = selected_link_bank.value.domain?.domain_url + selected_link_bank.value.visible_link
+            let url = selected_link_bank.value.domain?.domain_url + selected_link_bank.value.visible_link;
             globalMixin.methods.copyValue(url);
-            toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Updated', detail: 'URL Copied', life: 3000 });
         }
     },
     {
@@ -226,7 +232,7 @@ const items = [
                 <Menu ref="lableMenu" id="overlay_menu" :model="lableItems" :popup="true">
                     <template #item="{ item, label, props }">
                         <div class="p-2">
-                            <Tag class="ml-2 cursor-pointer" :severity="statusLable(item.label)"  :value="item.label" />
+                            <Tag class="ml-2 cursor-pointer" :severity="statusLable(item.label)" :value="item.label" />
                         </div>
                     </template>
                 </Menu>
@@ -249,7 +255,7 @@ const items = [
         </Column>
         <Column field="action" header="Action" sortable>
             <template #body="{ data, rowIndex }">
-                <Button type="button" size="small" text icon="pi pi-cog" @click="toggle($event, data, 'action')" aria-haspopup="true" aria-controls="overlay_menu" rounded outlined />
+                <Button type="button" size="Normal" text icon="pi pi-cog" @click="toggle($event, data, 'action')" aria-haspopup="true" aria-controls="overlay_menu" rounded outlined />
                 <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
                     <!-- <template #item="{ item, label, props }">
                         <div class="p-2">
@@ -258,6 +264,7 @@ const items = [
                         </div>
                     </template> -->
                 </Menu>
+                <Button text size="Normal" icon="pi pi-copy" @click="CopiedURL(data)" severity="help" aria-haspopup="true" rounded outlined />
             </template>
         </Column>
     </DataTable>
