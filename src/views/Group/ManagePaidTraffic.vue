@@ -134,7 +134,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Group!', life: 3000 });
         }
     } else if (modelType == 'paid-traffic-provider') {
         if (selectedPaidTrafficProvider.value) {
@@ -165,7 +165,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Paid Traffic Provider!', life: 3000 });
         }
     }
 }

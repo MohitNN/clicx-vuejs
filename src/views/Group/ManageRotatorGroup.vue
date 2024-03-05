@@ -121,7 +121,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Rotator Group!', life: 3000 });
         }
     }
 };

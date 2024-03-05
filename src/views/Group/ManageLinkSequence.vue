@@ -89,7 +89,7 @@ const editItems = (modelType) => {
             link_sequence.value.link_sequence_id = selectedLinkSequence.value.id;
             LinkSequenceModel.value = true;
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Link Sequence Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Link Sequence Group!', life: 3000 });
         }
     }
 };
@@ -122,7 +122,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Link Sequence Group!', life: 3000 });
         }
     }
 };

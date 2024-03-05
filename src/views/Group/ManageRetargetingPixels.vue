@@ -64,7 +64,7 @@ const editItems = (modelType) => {
             retargeting_pixel.value.retargeting_pixel_id = selectedRetargetingPixel.value.id;
             retargetingPixelModel.value = true;
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Retargeting Pixel!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Retargeting Pixel!', life: 3000 });
         }
     }
 };
@@ -98,7 +98,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Retargeting Pixel!', life: 3000 });
         }
     }
 };

@@ -171,7 +171,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Vendor!', life: 3000 });
         }
     } else if (modelType == 'group') {
         if (selectedGroup.value) {
@@ -229,7 +229,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Split Partner!', life: 3000 });
         }
     } else if (modelType == 'link-platform') {
         if (selectedLinkPlatform.value) {
@@ -258,7 +258,7 @@ const deleteItems = (modelType) => {
                 }
             });
         } else {
-            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Group!', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Select Link Platform!', life: 3000 });
         }
     }
 };
